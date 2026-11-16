@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ParallelsNetworkConfig dyn_lists="VirtualNetworks 1" schemaVersion="1.0">
+   <SystemFlags />
+   <IPv6Enabled>0</IPv6Enabled>
+   <UseKextless>-1</UseKextless>
+   <StartNaptd>-1</StartNaptd>
+   <NATDAllowEtcHostsWrite>0</NATDAllowEtcHostsWrite>
+   <UDPSendBufSize>4106</UDPSendBufSize>
+   <VirtualNetworks id="0" dyn_lists="VirtualNetwork 1">
+      <VirtualNetwork id="0" dyn_lists="">
+         <Uuid>{6ef84f03-b82f-4177-a954-5f788078a859}</Uuid>
+         <NetworkID>Shared</NetworkID>
+         <Description>Shared Networking</Description>
+         <Enabled>1</Enabled>
+         <NetworkType>1</NetworkType>
+         <BoundCardMac />
+         <VLANTag>65535</VLANTag>
+         <HostOnlyNetwork dyn_lists="">
+            <HostIPAddress>172.30.77.2</HostIPAddress>
+            <DhcpIPAddress>172.30.77.1</DhcpIPAddress>
+            <IPNetMask>255.255.255.0</IPNetMask>
+            <HostAssignIPv6>0</HostAssignIPv6>
+            <HostIP6Address>fd53:6e65:7470::1</HostIP6Address>
+            <DhcpIP6Address>fd53:6e65:7470::</DhcpIP6Address>
+            <IP6NetMask>ffff:ffff:ffff:ffff::</IP6NetMask>
+            <DNSUseEtcHosts>0</DNSUseEtcHosts>
+            <RegVmNameInEtcHosts>0</RegVmNameInEtcHosts>
+            <EnableDNS>1</EnableDNS>
+            <ParallelsAdapter dyn_lists="">
+               <Enabled>1</Enabled>
+               <Name>Parallels Shared #0</Name>
+               <PrlAdapterIndex>0</PrlAdapterIndex>
+               <HiddenAdapter>1</HiddenAdapter>
+            </ParallelsAdapter>
+            <DHCPServer dyn_lists="">
+               <Enabled>1</Enabled>
+               <IPScopeStart>172.30.77.10</IPScopeStart>
+               <IPScopeEnd>172.30.77.254</IPScopeEnd>
+               <IPReservations dyn_lists="IPReservation 0" />
+            </DHCPServer>
+            <DHCPv6Server dyn_lists="">
+               <Enabled>0</Enabled>
+               <IPScopeStart>fdb2:2c26:f4e4::</IPScopeStart>
+               <IPScopeEnd>fdb2:2c26:f4e4:0:ffff:ffff:ffff:ffff</IPScopeEnd>
+               <IPReservations dyn_lists="IPReservation 0" />
+            </DHCPv6Server>
+            <NATServer dyn_lists="">
+               <Enabled>1</Enabled>
+               <PortForwarding dyn_lists="">
+                  <TCP dyn_lists="ForwardEntry 0" />
+                  <UDP dyn_lists="ForwardEntry 0" />
+               </PortForwarding>
+               <IdleConnectionTimeoutSecs>7440</IdleConnectionTimeoutSecs>
+               <UseIPFilter>0</UseIPFilter>
+               <ProvideIPv6Route>-1</ProvideIPv6Route>
+               <NatDNSFilterIPv6Replies>-1</NatDNSFilterIPv6Replies>
+               <UseInterface />
+            </NATServer>
+         </HostOnlyNetwork>
+      </VirtualNetwork>
+      </VirtualNetworks>
+</ParallelsNetworkConfig>
