@@ -6,15 +6,15 @@
 # https://guide.macports.org/#reference.portgroup.github
 #
 # Documentation (sources):
-# *****
+# https://github.com/macports/macports-guide/blob/master/guide/xml/portgroup-github.xml
 
 options github.author github.project github.version github.tag_prefix github.tag_suffix
 
 options github.homepage
-default github.homepage {*****}
+default github.homepage {https://github.com/${github.author}/${github.project}}
 
 options github.raw
-default github.raw {*****}
+default github.raw {https://raw.githubusercontent.com/${github.author}/${github.project}}
 
 # Later code assumes that github.master_sites is a simple string, not a list.
 options github.master_sites
@@ -38,7 +38,7 @@ proc github.get_master_sites {} {
         }
         tarball {
             global github.author github.project
-            return *****
+            return https://codeload.github.com/${github.author}/${github.project}/legacy.tar.gz/${git.branch}?dummy=
         }
         default {
             # default to 'releases'

@@ -1,22 +1,22 @@
 {
   "clang_dependency-1.0.tcl": {
     "git_blob_sha1": "2bd42e0f8cf493dfa124fc4f14556e901aa850e0",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/3393469cc03e584134585e5b0d26808eb2104efa/_resources/port1.0/group/clang_dependency-1.0.tcl"
   },
   "debug-1.0.tcl": {
     "git_blob_sha1": "0164a6b2d03fabac959b8396ee143fe35a0d8b4e",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/3393469cc03e584134585e5b0d26808eb2104efa/_resources/port1.0/group/debug-1.0.tcl"
   },
   "legacysupport-1.1.tcl": {
     "git_blob_sha1": "575322c54dcbfe3ee2e19c866a3c7cba55c20281",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/3393469cc03e584134585e5b0d26808eb2104efa/_resources/port1.0/group/legacysupport-1.1.tcl"
   },
   "meson-1.0.tcl": {
     "git_blob_sha1": "58e04272d2de369cefa88eb17f6eb4466f70919e",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/3393469cc03e584134585e5b0d26808eb2104efa/_resources/port1.0/group/meson-1.0.tcl"
   },
   "muniversal-1.0.tcl": {
     "git_blob_sha1": "0f816ee02e7aab5b73acef1581457e4db6fadf53",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/3393469cc03e584134585e5b0d26808eb2104efa/_resources/port1.0/group/muniversal-1.0.tcl"
   }
 }

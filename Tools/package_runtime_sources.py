@@ -21,11 +21,11 @@ SOURCES = {
     'glib-2.88.3.tar.xz': ('ab24d24e698dfa1e408b7bcdb508f4aafc906185a8b8ce72fdf79bbbdc9b383b', 'https://download.gnome.org/sources/glib/2.88/glib-2.88.3.tar.xz', 'sources'),
     'libiconv-1.19.tar.gz': ('88dd96a8c0464eca144fc791ae60cd31cd8ee78321e67397e25fc095c4a19aa6', 'https://ftp.gnu.org/gnu/libiconv/libiconv-1.19.tar.gz', 'sources'),
     'gettext-1.0.tar.xz': ('71132a3fb71e68245b8f2ac4e9e97137d3e5c02f415636eb508ae607bc01add7', 'https://ftp.gnu.org/gnu/gettext/gettext-1.0.tar.xz', 'sources'),
-    'pcre2-10.49.tar.bz2': ('53c156e1ba416a20da8e65395daa132da0d80e76910424caca3fcdae7831d384', '*****', 'sources'),
-    'MacPorts-2.12.2.tar.bz2': ('b8e62e60b201cd31538c9834cdf6bd25c720b049703d3494727e638e980a8a8e', '*****', 'macports-base'),
-    'MacPorts-2.12.5.tar.bz2': ('a63be50fc453d261752d4e82deb28c9f3bd26517385a93892fee24bc8da9d661', '*****', 'macports-base'),
-    'MacPorts-2.12.6.tar.bz2': ('d4d77de931a0442d0d144e1b3033b6285d51091b9d9e6f73c4e02e3627be29a6', '*****', 'macports-base'),
-    'MacPorts-2.12.7.tar.bz2': ('6a3730de846bb78e3fb4ced2ed8d13f777e6aca2ab2f59cade9ca0d549ccc4ba', '*****', 'macports-base'),
+    'pcre2-10.49.tar.bz2': ('53c156e1ba416a20da8e65395daa132da0d80e76910424caca3fcdae7831d384', 'https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.49/pcre2-10.49.tar.bz2', 'sources'),
+    'MacPorts-2.12.2.tar.bz2': ('b8e62e60b201cd31538c9834cdf6bd25c720b049703d3494727e638e980a8a8e', 'https://github.com/macports/macports-base/releases/download/v2.12.2/MacPorts-2.12.2.tar.bz2', 'macports-base'),
+    'MacPorts-2.12.5.tar.bz2': ('a63be50fc453d261752d4e82deb28c9f3bd26517385a93892fee24bc8da9d661', 'https://github.com/macports/macports-base/releases/download/v2.12.5/MacPorts-2.12.5.tar.bz2', 'macports-base'),
+    'MacPorts-2.12.6.tar.bz2': ('d4d77de931a0442d0d144e1b3033b6285d51091b9d9e6f73c4e02e3627be29a6', 'https://github.com/macports/macports-base/releases/download/v2.12.6/MacPorts-2.12.6.tar.bz2', 'macports-base'),
+    'MacPorts-2.12.7.tar.bz2': ('6a3730de846bb78e3fb4ced2ed8d13f777e6aca2ab2f59cade9ca0d549ccc4ba', 'https://github.com/macports/macports-base/releases/download/v2.12.7/MacPorts-2.12.7.tar.bz2', 'macports-base'),
 }
 
 def file_sha256(path):

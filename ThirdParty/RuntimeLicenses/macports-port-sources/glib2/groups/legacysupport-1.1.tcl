@@ -80,7 +80,7 @@ proc legacysupport::get_library_link_flags {} {
 
 # Returns the newest Darwin version for which the legacy support
 # library generates missing symbols.
-# *****
+# https://github.com/macports/macports-legacy-support
 # Current Darwin 16 for utimensat, fsgetpath, setattrlistat
 proc legacysupport::get_newest_darwin_with_missing_symbols {} {
     variable ls_max_darwin_support

@@ -1,14 +1,14 @@
 {
   "clang_dependency-1.0.tcl": {
     "git_blob_sha1": "bc2454c1271570c3e6c03084a9519ec1824be243",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/745ff1b58358f448da09339ba9c3ea3a464e773e/_resources/port1.0/group/clang_dependency-1.0.tcl"
   },
   "gnulib-1.0.tcl": {
     "git_blob_sha1": "2e264442a91374f5f0b7b6d2da9024a99f797dde",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/745ff1b58358f448da09339ba9c3ea3a464e773e/_resources/port1.0/group/gnulib-1.0.tcl"
   },
   "muniversal-1.0.tcl": {
     "git_blob_sha1": "0f816ee02e7aab5b73acef1581457e4db6fadf53",
-    "url": "*****"
+    "url": "https://raw.githubusercontent.com/macports/macports-ports/745ff1b58358f448da09339ba9c3ea3a464e773e/_resources/port1.0/group/muniversal-1.0.tcl"
   }
 }

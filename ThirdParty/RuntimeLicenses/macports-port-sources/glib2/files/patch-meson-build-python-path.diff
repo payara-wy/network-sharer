@@ -11,7 +11,7 @@ GLib2 tries to find "python3" and if it can't find it, it will go for "python"; 
  # Sets the shebang on script files. This has been changed many times including
  # using env, the absolute path to the Python executable, and using both python
  # and python3 names. Please review the history here, prior to suggesting
- # further changes: *****
+ # further changes: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4391
 -python_shebang = '/usr/bin/env python3'
 +python_shebang = '@PYTHON@'
  

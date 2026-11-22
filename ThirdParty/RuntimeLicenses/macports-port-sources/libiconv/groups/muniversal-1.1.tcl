@@ -2,7 +2,7 @@
 
 ##########################################################################################
 # change defaults from
-# *****
+# https://github.com/macports/macports-base/blob/master/src/port1.0/portconfigure.tcl
 ##########################################################################################
 
 # disabling dependency tracking is only required when building for multiple architectures simultaneously
@@ -309,7 +309,7 @@ proc muniversal::map_phase {dir_save dir phase_cmd} {
 # prefer `-m32` or `-m64` for Fortran language
 #
 # see `portconfigure::configure_get_archflags` and `portconfigure::configure_get_ld_archflags` in
-#     *****
+#     https://github.com/macports/macports-base/blob/master/src/port1.0/portconfigure.tcl
 #
 proc muniversal::get_archflag {tool arch} {
     global configure.compiler
