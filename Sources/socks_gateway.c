@@ -5,6 +5,7 @@
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <poll.h>
 #include <pthread.h>
 #include <signal.h>
@@ -44,7 +45,15 @@ static uint8_t username[255],password[255];
 static size_t username_len=0,password_len=0;
 static pthread_mutex_t worker_lock=PTHREAD_MUTEX_INITIALIZER;
 static unsigned tcp_workers=0,dns_workers=0;
-typedef struct { int fd; int active; struct sockaddr_in client; uint32_t destination; uint16_t port; time_t last; uint64_t order; unsigned long generation; } udp_flow;
+/* Optional SOCKS5 listener for devices on the same LAN (for example a phone
+ * whose Wi-Fi is not authenticated). It only ever binds to the selected
+ * physical Wi-Fi address, never to every interface. */
+static int lan_port=0;
+static int lan_auth=0;
+static uint8_t lan_username[255],lan_password[255];
+static size_t lan_username_len=0,lan_password_len=0;
+static char lan_interface[IFNAMSIZ];
+typedef struct { int fd; int control; int active; struct sockaddr_in client; uint32_t destination; uint16_t port; time_t last; uint64_t order; unsigned long generation; } udp_flow;
 static udp_flow flows[UDP_FLOW_MAX];
 static uint64_t flow_order=0;
 
@@ -91,6 +100,23 @@ static int read_all(int fd,void *buf,size_t n) {
     while (n) { ssize_t r=recv(fd,p,n,0); if (r<=0) { if (r<0 && errno==EINTR) continue; return 0; } p+=r; n-=(size_t)r; }
     return 1;
 }
+/* Handshake bytes must arrive within one absolute deadline; per-recv timeouts
+ * alone let a slow client hold a slot indefinitely. */
+static int read_handshake(int fd,void *buf,size_t n,const struct timespec *deadline) {
+    uint8_t *p=buf;
+    while (n) {
+        struct timespec now={0}; (void)clock_gettime(CLOCK_MONOTONIC,&now);
+        long remaining=(deadline->tv_sec-now.tv_sec)*1000+(deadline->tv_nsec-now.tv_nsec)/1000000;
+        if (remaining<=0) return 0;
+        struct timeval timeout={.tv_sec=remaining/1000,.tv_usec=(remaining%1000)*1000};
+        (void)setsockopt(fd,SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
+        ssize_t r=recv(fd,p,n,0);
+        if (r>0) { p+=r; n-=(size_t)r; continue; }
+        if (r<0 && errno==EINTR) continue;
+        return 0;
+    }
+    return 1;
+}
 static int write_all(int fd,const void *buf,size_t n) {
     const uint8_t *p=buf;
     while (n) { ssize_t r=send(fd,p,n,0); if (r<=0) { if (r<0 && errno==EINTR) continue; return 0; } p+=r; n-=(size_t)r; }
@@ -133,6 +159,8 @@ static int proxy_socket(int seconds) {
     }
     return fd;
 }
+#include "upstream_udp.h"
+
 static int direct_socket(int kind,uint32_t address,uint16_t port,int seconds,unsigned long *generation) {
     for (int attempt=0;attempt<2;attempt++) {
         unsigned int index; struct in_addr source; unsigned long current_generation;
@@ -169,9 +197,19 @@ static int target_socket(uint32_t address,uint16_t port,int seconds) {
     return fd;
 }
 typedef struct { uint8_t bytes[BUF_SIZE]; size_t start,len; int eof,shutdown_sent; } buffer;
+/* A relay carries long-lived TCP sessions; an idle peer is not a failed one.
+ * Let the kernel keep it alive, discard only entries the guest closed. */
+static void configure_long_lived(int fd) {
+    int keep=1,idle=60,interval=10,count=3;
+    (void)setsockopt(fd,SOL_SOCKET,SO_KEEPALIVE,&keep,sizeof(keep));
+    (void)setsockopt(fd,IPPROTO_TCP,TCP_KEEPALIVE,&idle,sizeof(idle));
+    (void)setsockopt(fd,IPPROTO_TCP,TCP_KEEPINTVL,&interval,sizeof(interval));
+    (void)setsockopt(fd,IPPROTO_TCP,TCP_KEEPCNT,&count,sizeof(count));
+}
 static void relay(int client,int remote) {
     int a=fcntl(client,F_GETFL,0), b=fcntl(remote,F_GETFL,0);
     if (a<0 || b<0 || fcntl(client,F_SETFL,a|O_NONBLOCK) || fcntl(remote,F_SETFL,b|O_NONBLOCK)) return;
+    configure_long_lived(client); configure_long_lived(remote);
     buffer cr={0}, rc={0};
     for (;;) {
         if (cr.eof && cr.len==0 && !cr.shutdown_sent) { shutdown(remote,SHUT_WR); cr.shutdown_sent=1; }
@@ -184,7 +222,7 @@ static void relay(int client,int remote) {
         if (rc.len) fds[0].events|=POLLOUT;
         if (!rc.eof && rc.start+rc.len<BUF_SIZE) fds[1].events|=POLLIN;
         if (cr.len) fds[1].events|=POLLOUT;
-        int r=poll(fds,2,300000); if (r<=0) { if (r<0 && errno==EINTR) continue; break; }
+        int r=poll(fds,2,30000); if (r==0) continue; if (r<0) { if (errno==EINTR) continue; break; }
         if (fds[0].revents&(POLLERR|POLLNVAL) || fds[1].revents&(POLLERR|POLLNVAL)) break;
         if (fds[0].revents&(POLLIN|POLLHUP)) {
             ssize_t n=recv(client,cr.bytes+cr.start+cr.len,BUF_SIZE-cr.start-cr.len,0);
@@ -285,22 +323,341 @@ static int read_auth_file(void) {
     int extra=fgetc(f); fclose(f);
     return extra==EOF && ((username_len==0 && password_len==0) || (username_len>0 && password_len>0));
 }
-static void close_flow(int i) { if (flows[i].active) close(flows[i].fd); memset(&flows[i],0,sizeof(flows[i])); }
+/* ---------- LAN SOCKS5 service (phone -> Mac -> upstream) ----------
+ * The listener binds only to the selected Wi-Fi address, never to every
+ * interface. Credentials are mandatory: without them any device on the same
+ * network could use the Mac's already-authenticated connection. */
+enum { LAN_HANDSHAKE, LAN_TCP, LAN_UDP };
+static const unsigned lan_limits[3]={48,192,32};
+static pthread_mutex_t lan_worker_lock=PTHREAD_MUTEX_INITIALIZER;
+static unsigned lan_workers[3];
+static int lan_tcp_listener=-1;
+static struct in_addr lan_bound_address;
+static int lan_reserve_worker(void) {
+    pthread_mutex_lock(&lan_worker_lock);
+    int allowed=lan_workers[LAN_HANDSHAKE]<lan_limits[LAN_HANDSHAKE];
+    if (allowed) lan_workers[LAN_HANDSHAKE]++;
+    pthread_mutex_unlock(&lan_worker_lock); return allowed;
+}
+/* Long-lived TCP/UDP sessions must not consume the handshake budget or starve
+ * the other protocol. All three budgets remain bounded. */
+static int lan_promote_worker(int kind) {
+    pthread_mutex_lock(&lan_worker_lock);
+    int allowed=lan_workers[kind]<lan_limits[kind];
+    if (allowed) { lan_workers[LAN_HANDSHAKE]--; lan_workers[kind]++; }
+    pthread_mutex_unlock(&lan_worker_lock); return allowed;
+}
+static void lan_release_worker(int kind) {
+    pthread_mutex_lock(&lan_worker_lock);
+    if (lan_workers[kind]) lan_workers[kind]--;
+    pthread_mutex_unlock(&lan_worker_lock);
+}
+/* Read the current IPv4 address of the selected physical Wi-Fi interface. */
+static int lan_wifi_address(struct in_addr *out) {
+    struct ifaddrs *list=NULL; int found=0;
+    if (!lan_interface[0] || getifaddrs(&list)) return 0;
+    for (struct ifaddrs *p=list;p;p=p->ifa_next) {
+        if (p->ifa_addr && p->ifa_addr->sa_family==AF_INET && !strcmp(p->ifa_name,lan_interface)) {
+            *out=((struct sockaddr_in *)p->ifa_addr)->sin_addr; found=1; break;
+        }
+    }
+    freeifaddrs(list);
+    return found;
+}
+static int dns_skip_name(const uint8_t *packet,size_t length,size_t *offset) {
+    size_t position=*offset, steps=0;
+    for (;;) {
+        if (position>=length || steps++>length) return 0;
+        uint8_t label=packet[position++];
+        if (!label) break;
+        if ((label&0xc0)==0xc0) { if (position>=length) return 0; position++; break; }
+        if (label&0xc0) return 0;
+        if (position+label>length) return 0;
+        position+=label;
+    }
+    *offset=position; return 1;
+}
+/* Resolve one IPv4 address through the configured resolvers and upstream mode. */
+static int resolve_ipv4_name_ttl(const char *name,struct in_addr *out,uint32_t *ttl) {
+    if (ttl) *ttl=0;
+    size_t name_length=strlen(name);
+    if (!name_length || name_length>253) return 0;
+    uint8_t query[DNS_MAX]; size_t length=0;
+    query[length++]=(uint8_t)(arc4random()>>24); query[length++]=(uint8_t)(arc4random()>>24);
+    query[length++]=1; query[length++]=0;
+    query[length++]=0; query[length++]=1; query[length++]=0; query[length++]=0;
+    query[length++]=0; query[length++]=0; query[length++]=0; query[length++]=0;
+    const char *part=name;
+    for (;;) {
+        const char *dot=strchr(part,'.');
+        size_t label=dot ? (size_t)(dot-part) : strlen(part);
+        if (!label || label>63 || length+1+label+5>DNS_MAX) return 0;
+        for (size_t i=0;i<label;i++) {
+            unsigned char c=(unsigned char)part[i];
+            if (c<=32 || c>=127 || c=='\\' || c=='/') return 0;
+        }
+        query[length++]=(uint8_t)label; memcpy(query+length,part,label); length+=label;
+        if (!dot) break;
+        part=dot+1;
+        if (!*part) return 0;
+    }
+    query[length++]=0;
+    query[length++]=0; query[length++]=1; query[length++]=0; query[length++]=1;
+    uint8_t reply[DNS_MAX]; size_t reply_length=0;
+    if (!dns_exchange(query,length,reply,&reply_length)) return 0;
+    if (reply_length<12 || reply[0]!=query[0] || reply[1]!=query[1] || (reply[3]&0x0f)) return 0;
+    unsigned questions=((unsigned)reply[4]<<8)|reply[5], answers=((unsigned)reply[6]<<8)|reply[7];
+    size_t offset=12;
+    for (unsigned i=0;i<questions;i++) {
+        if (!dns_skip_name(reply,reply_length,&offset) || offset+4>reply_length) return 0;
+        offset+=4;
+    }
+    uint32_t minimum_ttl=UINT32_MAX;
+    for (unsigned i=0;i<answers && i<64;i++) {
+        if (!dns_skip_name(reply,reply_length,&offset) || offset+10>reply_length) return 0;
+        unsigned type=((unsigned)reply[offset]<<8)|reply[offset+1];
+        unsigned klass=((unsigned)reply[offset+2]<<8)|reply[offset+3];
+        uint32_t record_ttl=((uint32_t)reply[offset+4]<<24)|((uint32_t)reply[offset+5]<<16)|
+                            ((uint32_t)reply[offset+6]<<8)|reply[offset+7];
+        unsigned size=((unsigned)reply[offset+8]<<8)|reply[offset+9];
+        offset+=10;
+        if (offset+size>reply_length) return 0;
+        if (klass==1 && (type==1 || type==5) && record_ttl<minimum_ttl) minimum_ttl=record_ttl;
+        if (type==1 && klass==1 && size==4) {
+            memcpy(out,reply+offset,4);
+            if (ttl) *ttl=minimum_ttl;
+            return 1;
+        }
+        offset+=size;
+    }
+    return 0;
+}
+static int resolve_ipv4_name(const char *name,struct in_addr *out) {
+    return resolve_ipv4_name_ttl(name,out,NULL);
+}
+/* Send a SOCKS5 CONNECT with a domain name to the configured upstream proxy. */
+static int proxy_connect_name(const char *name,uint16_t port,int seconds) {
+    size_t length=strlen(name);
+    if (!length || length>253) return -1;
+    int fd=proxy_socket(seconds); if (fd<0) return -1;
+    uint8_t request[4+1+255+2]; size_t n=0;
+    request[n++]=5; request[n++]=1; request[n++]=0; request[n++]=3;
+    request[n++]=(uint8_t)length; memcpy(request+n,name,length); n+=length;
+    request[n++]=(uint8_t)(port>>8); request[n++]=(uint8_t)(port&0xff);
+    uint8_t response[4],discarded[258]; size_t skip=0;
+    if (!write_all(fd,request,n) || !read_all(fd,response,4) || response[0]!=5 || response[1]!=0) { close(fd); return -1; }
+    if (response[3]==1) skip=4;
+    else if (response[3]==4) skip=16;
+    else if (response[3]==3) { uint8_t size; if (!read_all(fd,&size,1)) { close(fd); return -1; } skip=size; }
+    else { close(fd); return -1; }
+    if (!read_all(fd,discarded,skip+2)) { close(fd); return -1; }
+    return fd;
+}
+/* Refuse loopback and the unspecified address as LAN-side destinations. */
+static int lan_target_allowed(uint32_t address) {
+    uint32_t host=ntohl(address);
+    return host && (host>>24)!=127;
+}
+static int lan_connect_ip(uint32_t address,uint16_t port) {
+    if (!port || !lan_target_allowed(address)) return -1;
+    /* target_socket expects the port in network byte order, as on the wire. */
+    return target_socket(address,htons(port),7);
+}
+static int lan_connect_name(const char *name,size_t length,uint16_t port) {
+    if (!length || length>253 || !port) return -1;
+    char clean[254]; memcpy(clean,name,length); clean[length]=0;
+    for (size_t i=0;i<length;i++) {
+        unsigned char c=(unsigned char)clean[i];
+        if (c<=32 || c>=127 || c=='\\' || c=='/') return -1;
+    }
+    if (!direct_mode) return proxy_connect_name(clean,port,7);
+    struct in_addr resolved;
+    if (!resolve_ipv4_name(clean,&resolved) || !lan_target_allowed(resolved.s_addr)) return -1;
+    return target_socket(resolved.s_addr,htons(port),7);
+}
+static int lan_reply(int client,uint8_t code,const uint8_t *address,uint16_t port) {
+    uint8_t reply[10]={5,code,0,1,0,0,0,0,0,0};
+    if (address) memcpy(reply+4,address,4);
+    reply[8]=(uint8_t)(port>>8); reply[9]=(uint8_t)(port&0xff);
+    return write_all(client,reply,sizeof(reply));
+}
+static int lan_credentials_match(const uint8_t *user,size_t user_length,const uint8_t *password,size_t password_length) {
+    if (user_length!=lan_username_len || password_length!=lan_password_len) return 0;
+    unsigned char difference=0;
+    for (size_t i=0;i<user_length;i++) difference|=(unsigned char)(user[i]^lan_username[i]);
+    for (size_t i=0;i<password_length;i++) difference|=(unsigned char)(password[i]^lan_password[i]);
+    return difference==0;
+}
+#include "lan_udp.h"
+
+static void *serve_lan(void *arg) {
+    int client=(int)(intptr_t)arg, worker_kind=LAN_HANDSHAKE;
+    struct timeval timeout={.tv_sec=10,.tv_usec=0};
+    int noSignal=1;
+    (void)setsockopt(client,SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
+    (void)setsockopt(client,SOL_SOCKET,SO_SNDTIMEO,&timeout,sizeof(timeout));
+    (void)setsockopt(client,SOL_SOCKET,SO_NOSIGPIPE,&noSignal,sizeof(noSignal));
+    struct timespec deadline={0}; (void)clock_gettime(CLOCK_MONOTONIC,&deadline);
+    deadline.tv_sec+=10;
+    uint8_t head[2+255];
+    if (!read_handshake(client,head,2,&deadline) || head[0]!=5 || !head[1]) goto done;
+    size_t methods=head[1];
+    if (!read_handshake(client,head+2,methods,&deadline)) goto done;
+    { int wanted=lan_auth ? 2 : 0, offered=0;
+      for (size_t i=0;i<methods;i++) if (head[2+i]==wanted) offered=1;
+      if (!offered) { uint8_t reject[2]={5,0xff}; (void)write_all(client,reject,2); goto done; }
+      uint8_t selection[2]={5,(uint8_t)wanted};
+      if (!write_all(client,selection,2)) goto done;
+    }
+    if (lan_auth) {
+        uint8_t version=0,user_length=0,password_length=0,user[255],password[255];
+        int ok=read_handshake(client,&version,1,&deadline) && version==1 && read_handshake(client,&user_length,1,&deadline) && user_length>0 &&
+               read_handshake(client,user,user_length,&deadline) && read_handshake(client,&password_length,1,&deadline) && password_length>0 &&
+               read_handshake(client,password,password_length,&deadline) && lan_credentials_match(user,user_length,password,password_length);
+        clear_bytes(user,255); clear_bytes(password,255);
+        uint8_t result[2]={1,(uint8_t)(ok?0:1)};
+        if (!write_all(client,result,2) || !ok) goto done;
+    }
+    uint8_t request[4];
+    if (!read_handshake(client,request,4,&deadline) || request[0]!=5 || request[2]!=0) goto done;
+    { int command=request[1], atyp=request[3];
+      uint8_t address[4]={0}, name[256]; size_t name_length=0;
+      if (atyp==1) { if (!read_handshake(client,address,4,&deadline)) goto done; }
+      else if (atyp==3) {
+          uint8_t size=0;
+          if (!read_handshake(client,&size,1,&deadline) || !size || !read_handshake(client,name,size,&deadline)) goto done;
+          name[size]=0; name_length=size;
+      } else if (atyp==4) { uint8_t skip6[16]; if (!read_handshake(client,skip6,16,&deadline)) goto done; }
+      else { (void)lan_reply(client,8,NULL,0); goto done; }
+      uint8_t port_bytes[2];
+      if (!read_handshake(client,port_bytes,2,&deadline)) goto done;
+      uint16_t port=(uint16_t)(((unsigned)port_bytes[0]<<8)|port_bytes[1]);
+      if (command==1) {
+          if (!lan_promote_worker(LAN_TCP)) { (void)lan_reply(client,1,NULL,0); goto done; }
+          worker_kind=LAN_TCP;
+          int remote=-1;
+          if (atyp==1) { uint32_t destination; memcpy(&destination,address,4); remote=lan_connect_ip(destination,port); }
+          else if (atyp==3) remote=lan_connect_name((const char *)name,name_length,port);
+          if (remote<0) { (void)lan_reply(client,5,NULL,0); goto done; }
+          if (!lan_reply(client,0,NULL,0)) { close(remote); goto done; }
+          relay(client,remote);
+          close(remote);
+      } else if (command==3) {
+          if (atyp!=1) { (void)lan_reply(client,8,NULL,0); goto done; }
+          if (!lan_promote_worker(LAN_UDP)) { (void)lan_reply(client,1,NULL,0); goto done; }
+          worker_kind=LAN_UDP;
+          uint32_t requested; memcpy(&requested,address,4);
+          serve_lan_association(client,requested,htons(port));
+      } else {
+          (void)lan_reply(client,7,NULL,0);
+      }
+    }
+done:
+    close(client); lan_release_worker(worker_kind); return NULL;
+}
+static int lan_bind_tcp(struct in_addr address) {
+    int fd=socket(AF_INET,SOCK_STREAM,0); if (fd<0) return -1;
+    int one=1;
+    (void)setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
+    struct sockaddr_in local={.sin_len=sizeof(local),.sin_family=AF_INET,.sin_port=htons((uint16_t)lan_port),.sin_addr=address};
+    if (bind(fd,(struct sockaddr *)&local,sizeof(local)) || listen(fd,64)) { close(fd); return -1; }
+    return fd;
+}
+static void *serve_lan_tcp(void *arg) {
+    (void)arg;
+    for (;;) {
+        struct in_addr current;
+        if (!lan_wifi_address(&current)) {
+            if (lan_tcp_listener>=0) { close(lan_tcp_listener); lan_tcp_listener=-1; }
+            sleep(2); continue;
+        }
+        if (lan_tcp_listener<0 || current.s_addr!=lan_bound_address.s_addr) {
+            if (lan_tcp_listener>=0) close(lan_tcp_listener);
+            lan_tcp_listener=lan_bind_tcp(current);
+            if (lan_tcp_listener>=0) lan_bound_address=current;
+            if (lan_tcp_listener<0) { sleep(2); continue; }
+        }
+        struct pollfd wait={.fd=lan_tcp_listener,.events=POLLIN};
+        int ready=poll(&wait,1,2000);
+        if (ready>0 && (wait.revents&POLLIN)) {
+            struct sockaddr_in peer={0}; socklen_t length=sizeof(peer);
+            int fd=accept(lan_tcp_listener,(struct sockaddr *)&peer,&length);
+            if (fd>=0) {
+                if (!lan_reserve_worker()) close(fd);
+                else {
+                    pthread_t thread;
+                    if (pthread_create(&thread,NULL,serve_lan,(void *)(intptr_t)fd)) { close(fd); lan_release_worker(LAN_HANDSHAKE); }
+                    else pthread_detach(thread);
+                }
+            }
+        } else if (ready<0 && errno!=EINTR) sleep(1);
+    }
+    return NULL;
+}
+static int read_lan_auth_file(void) {
+    const char *path=getenv("NAPTD_LAN_AUTH_FILE");
+    if (!path || !*path) return 0;
+    FILE *f=fopen(path,"rb"); if (!f) return 0;
+    int u=fgetc(f);
+    if (u<=0 || u==EOF) { fclose(f); return 0; }
+    lan_username_len=(size_t)u;
+    if (fread(lan_username,1,lan_username_len,f)!=lan_username_len) { fclose(f); return 0; }
+    int p=fgetc(f);
+    if (p<=0 || p==EOF) { fclose(f); return 0; }
+    lan_password_len=(size_t)p;
+    if (fread(lan_password,1,lan_password_len,f)!=lan_password_len) { fclose(f); return 0; }
+    int extra=fgetc(f); fclose(f);
+    return extra==EOF;
+}
+/* Called before gateway_ready so a failure is reported to the controller. */
+static int lan_start(void) {
+    if (!lan_port) return 1;
+    if (!lan_interface[0] || !read_lan_auth_file()) { fputs("lan_auth_unavailable\n",stderr); return 0; }
+    lan_auth=1;
+    struct in_addr current;
+    if (!lan_wifi_address(&current)) { fputs("lan_wifi_unavailable\n",stderr); return 0; }
+    lan_tcp_listener=lan_bind_tcp(current);
+    if (lan_tcp_listener<0) { fputs("lan_port_unavailable\n",stderr); return 0; }
+    lan_bound_address=current;
+    pthread_t thread;
+    if (pthread_create(&thread,NULL,serve_lan_tcp,NULL)) { fputs("lan_thread_failed\n",stderr); close(lan_tcp_listener); lan_tcp_listener=-1; return 0; }
+    pthread_detach(thread);
+    return 1;
+}
+static void close_flow(int i) {
+    if (flows[i].active) {
+        close(flows[i].fd);
+        if (flows[i].control>=0) close(flows[i].control);
+    }
+    memset(&flows[i],0,sizeof(flows[i]));
+}
 static int get_flow(struct sockaddr_in peer,uint32_t address,uint16_t port) {
-    unsigned long generation;
-    if (!upstream_snapshot(NULL,NULL,&generation,0)) return -1;
+    unsigned long generation=0;
+    if (direct_mode && !upstream_snapshot(NULL,NULL,&generation,0)) return -1;
     int free_slot=-1,oldest_slot=-1;
     for (int i=0;i<UDP_FLOW_MAX;i++) {
-        if (flows[i].active && flows[i].generation!=generation) close_flow(i);
+        if (flows[i].active && ((direct_mode && flows[i].generation!=generation) ||
+            (!direct_mode && !control_alive(flows[i].control)))) close_flow(i);
         if (!flows[i].active) { if (free_slot<0) free_slot=i; continue; }
-        if (flows[i].client.sin_addr.s_addr==peer.sin_addr.s_addr && flows[i].client.sin_port==peer.sin_port && flows[i].destination==address && flows[i].port==port) return i;
+        if (flows[i].client.sin_addr.s_addr==peer.sin_addr.s_addr && flows[i].client.sin_port==peer.sin_port &&
+            flows[i].destination==address && flows[i].port==port) return i;
         if (oldest_slot<0 || flows[i].order<flows[oldest_slot].order) oldest_slot=i;
     }
     if (free_slot<0 && oldest_slot>=0) { close_flow(oldest_slot); free_slot=oldest_slot; }
     if (free_slot<0) return -1;
-    int fd=direct_socket(SOCK_DGRAM,address,port,7,&generation); if (fd<0) return -1;
-    int flags=fcntl(fd,F_GETFL,0); if (flags<0 || fcntl(fd,F_SETFL,flags|O_NONBLOCK)) { close(fd); return -1; }
-    flows[free_slot]=(udp_flow){.fd=fd,.active=1,.client=peer,.destination=address,.port=port,.last=time(NULL),.order=++flow_order,.generation=generation};
+    int fd=-1,control=-1;
+    if (direct_mode) {
+        fd=direct_socket(SOCK_DGRAM,address,port,2,&generation);
+    } else {
+        proxy_udp transport;
+        if (!proxy_udp_open(&transport)) return -1;
+        fd=transport.fd; control=transport.control;
+    }
+    if (fd<0) return -1;
+    int flags=fcntl(fd,F_GETFL,0);
+    if (flags<0 || fcntl(fd,F_SETFL,flags|O_NONBLOCK)) { close(fd); if(control>=0)close(control); return -1; }
+    flows[free_slot]=(udp_flow){.fd=fd,.control=control,.active=1,.client=peer,.destination=address,.port=port,
+                                .last=time(NULL),.order=++flow_order,.generation=generation};
     return free_slot;
 }
 int main(int argc,char **argv) {
@@ -328,10 +685,24 @@ int main(int argc,char **argv) {
         proxy_port=(uint16_t)port;
     } else return 2;
     memcpy(secret,provided,TOKEN_LEN); signal(SIGPIPE,SIG_IGN); setvbuf(stdout,NULL,_IONBF,0);
+    /* NAPTD_LAN_PORT opens a SOCKS5 listener on the selected Wi-Fi address for
+     * devices on the same LAN; NAPTD_LAN_AUTH_FILE holds its mandatory credentials. */
+    { const char *text=getenv("NAPTD_LAN_PORT");
+      if (text && *text) {
+          char *end=NULL; unsigned long value=strtoul(text,&end,10);
+          if (*end || value<1 || value>65535) { fputs("invalid_lan_port\n",stderr); return 2; }
+          lan_port=(int)value;
+          const char *iface=getenv("NAPTD_LAN_INTERFACE");
+          if (!iface || !*iface || strlen(iface)>=sizeof(lan_interface) || strncmp(iface,"en",2)) { fputs("invalid_lan_interface\n",stderr); return 2; }
+          memcpy(lan_interface,iface,strlen(iface)+1);
+      }
+    }
     if (!direct_mode) { int test=proxy_socket(7); if (test<0) { fputs("proxy_unavailable_or_auth_failed\n",stderr); return 3; } close(test); }
+    if (!lan_start()) return 3;
     uint16_t tcp_port=0,dns_port=0; int tcp=local_socket(SOCK_STREAM,&tcp_port), dns=local_socket(SOCK_DGRAM,&dns_port);
     if (tcp<0 || dns<0 || listen(tcp,128)) { perror("local_relay"); return 4; }
-    printf("gateway_ready:%u:%u\n",tcp_port,dns_port);
+    if (lan_port) printf("gateway_ready:%u:%u:%d\n",tcp_port,dns_port,lan_port);
+    else printf("gateway_ready:%u:%u\n",tcp_port,dns_port);
     for (;;) {
         struct pollfd fds[2+UDP_FLOW_MAX]={{.fd=tcp,.events=POLLIN},{.fd=dns,.events=POLLIN}};
         int slots[UDP_FLOW_MAX], count=2;
@@ -341,14 +712,25 @@ int main(int argc,char **argv) {
         for (int j=2;j<count;j++) {
             int i=slots[j-2]; if (!flows[i].active || flows[i].fd!=fds[j].fd) continue;
             if (fds[j].revents&POLLIN) {
-                uint8_t reply[UDP_HEADER_LEN+UDP_PAYLOAD_MAX]; ssize_t n=recv(flows[i].fd,reply+UDP_HEADER_LEN,UDP_PAYLOAD_MAX,0);
+                uint8_t reply[UDP_HEADER_LEN+UDP_PAYLOAD_MAX]; ssize_t n;
+                if (direct_mode) {
+                    struct iovec iov={.iov_base=reply+UDP_HEADER_LEN,.iov_len=UDP_PAYLOAD_MAX};
+                    struct msghdr msg={.msg_iov=&iov,.msg_iovlen=1};
+                    n=recvmsg(flows[i].fd,&msg,0);
+                    if (n>=0 && (msg.msg_flags&MSG_TRUNC)) n=-1;
+                } else {
+                    proxy_udp transport={.fd=flows[i].fd,.control=flows[i].control};
+                    uint32_t source=0; uint16_t port=0;
+                    n=proxy_udp_receive(&transport,&source,&port,reply+UDP_HEADER_LEN,UDP_PAYLOAD_MAX);
+                    if (n>=0 && (source!=flows[i].destination || port!=flows[i].port || !control_alive(flows[i].control))) n=-1;
+                }
                 if (n>=0) {
                     memcpy(reply,"UDP1",4); memcpy(reply+4,secret,TOKEN_LEN);
                     memcpy(reply+4+TOKEN_LEN,&flows[i].destination,4); memcpy(reply+4+TOKEN_LEN+4,&flows[i].port,2);
                     (void)sendto(dns,reply,UDP_HEADER_LEN+(size_t)n,0,(struct sockaddr *)&flows[i].client,sizeof(flows[i].client)); flows[i].last=now; flows[i].order=++flow_order;
                 }
             }
-            if (fds[j].revents&(POLLERR|POLLNVAL) || now-flows[i].last>120) close_flow(i);
+            if (fds[j].revents&(POLLERR|POLLNVAL) || now-flows[i].last>120 || (!direct_mode && !control_alive(flows[i].control))) close_flow(i);
         }
         if (fds[0].revents&POLLIN) {
             struct sockaddr_in peer={0}; socklen_t len=sizeof(peer); int fd=accept(tcp,(struct sockaddr *)&peer,&len);
@@ -366,10 +748,16 @@ int main(int argc,char **argv) {
                 task->fd=dns; task->peer=peer; task->peer_len=peer_len;
                 if (!reserve_worker(1)) free(task);
                 else { task->size=(size_t)n-DNS_HEADER_LEN; memcpy(task->data,data+DNS_HEADER_LEN,task->size); pthread_t thread; if (pthread_create(&thread,NULL,serve_dns,task)) { free(task); release_worker(1); } else pthread_detach(thread); }
-            } else if (direct_mode && !memcmp(data,"UDP1",4) && n>UDP_HEADER_LEN) {
+            } else if (!memcmp(data,"UDP1",4) && n>=UDP_HEADER_LEN) {
                 uint32_t address; uint16_t port; memcpy(&address,data+4+TOKEN_LEN,4); memcpy(&port,data+4+TOKEN_LEN+4,2);
-                if (!port) continue; int slot=get_flow(peer,address,port);
-                if (slot>=0) { ssize_t sent=send(flows[slot].fd,data+UDP_HEADER_LEN,(size_t)n-UDP_HEADER_LEN,0); if (sent>=0) { flows[slot].last=now; flows[slot].order=++flow_order; } }
+                /* Hold the same destination policy as the framed caller. */
+                if (!port || !lan_target_allowed(address)) continue; int slot=get_flow(peer,address,port);
+                if (slot>=0) {
+                    proxy_udp transport={.fd=flows[slot].fd,.control=flows[slot].control};
+                    ssize_t sent=direct_mode ? send(flows[slot].fd,data+UDP_HEADER_LEN,(size_t)n-UDP_HEADER_LEN,0)
+                        : proxy_udp_send(&transport,address,port,data+UDP_HEADER_LEN,(size_t)n-UDP_HEADER_LEN);
+                    if (sent>=0) { flows[slot].last=now; flows[slot].order=++flow_order; }
+                }
             }
         }
     }

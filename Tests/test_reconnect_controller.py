@@ -37,7 +37,7 @@ elif args and args[0].startswith('bridge'):
 elif args and args[0] in s['ports']:
     d = s['ports'][args[0]]
     print(args[0] + ': flags=UP')
-    print('\tether ' + d.get('mac', '02:00:00:00:00:07'))
+    if not d.get('missing_mac'): print('\tether ' + d.get('mac', '02:00:00:00:00:07'))
     if d.get('ip'): print('\tinet ' + d['ip'] + ' netmask 0xffffff00')
     print('\tstatus: ' + ('active' if d.get('active', True) else 'inactive'))
 else:
@@ -60,6 +60,7 @@ def snapshot(ports, mobile, members=(), other=(), **kwargs):
 port = {'active': True, 'ip': '169.254.10.20', 'mac': '02:00:00:00:00:07'}
 with tempfile.TemporaryDirectory(prefix='hotspot-reconnect-test-', dir='/private/tmp') as temporary:
     root = Path(temporary)
+    (root/'host-macs').write_text('02:00:00:00:00:03\n02:00:00:00:00:07\n')
     for name, content in [('ifconfig', mock), ('route', route_mock), ('mobile_identity', identity_mock)]:
         target = root/name
         target.write_text(content)
@@ -76,6 +77,8 @@ with tempfile.TemporaryDirectory(prefix='hotspot-reconnect-test-', dir='/private
         'scan_error': snapshot({'en8': port}, [], ['en8'], scan_error=True),
         'mixed_gone': snapshot({'en3': {**port, 'mac':'02:00:00:00:00:03'}}, [], ['en3']),
         'mixed_return': snapshot({'en3': {**port, 'mac':'02:00:00:00:00:03'}, 'en8': port}, [('en8', identity)], ['en3']),
+        'transient_no_mac': snapshot({'en8': {**port, 'missing_mac': True}}, [('en8', identity)], ['en8']),
+        'transient_unlisted_mac': snapshot({'en8': {**port, 'mac': '12:34:56:78:90:ab'}}, [('en8', identity)], ['en8']),
     }
     for name, data in cases.items(): (root/(name+'.json')).write_text(json.dumps(data))
     functions = functions.replace('/sbin/ifconfig', shlex.quote(str(root/'ifconfig')))
@@ -87,6 +90,10 @@ declare -a original_ports port_kinds port_ids port_macs current_ports missing_co
 original_ports[0]=en7; port_kinds[0]=mobile; port_ids[0]=__IDENTITY__; port_macs[0]=-; current_ports[0]=en7; missing_counts[0]=0
 portcount=1; needs_mobile=1; portlist=en7; portmap=en7:en7; attached_list=' en7'; state=running; message='共享端口已接入；请在设备上验证网络'
 write_state() { :; }
+record_interface() { :; }
+REFRESH_CALLS=0; REFRESH_FAIL_AT=0
+refresh_host_macs() { REFRESH_CALLS=$((REFRESH_CALLS+1)); [ "$REFRESH_CALLS" != "$REFRESH_FAIL_AT" ]; }
+fail() { printf '%s\\n' "$*" >&2; return 1; }
 __FUNCTIONS__
 load_case() { /bin/cp "__DIR__/$1.json" "$RECONNECT_TEST_STATE"; }
 expect_members() { /usr/bin/python3 -c 'import json,os,sys; s=json.load(open(os.environ["RECONNECT_TEST_STATE"])); assert s["bridges"]["bridge102"]==sys.argv[1:]' "$@"; }
@@ -99,6 +106,14 @@ load_case ambiguous; reconcile_ports; [ "$state" = waiting ]; expect_members
 load_case other; reconcile_ports; [ "$state" = waiting ]; expect_members
 load_case addressed; reconcile_ports; [ "$state" = waiting ]; expect_members
 load_case wrong; reconcile_ports; reconcile_ports; [ "$state" = waiting ]; expect_members
+load_case transient_no_mac; reconcile_ports; [ "$state" = waiting ]; expect_members
+load_case transient_unlisted_mac; reconcile_ports; [ "$state" = waiting ]; expect_members
+load_case renumber; REFRESH_CALLS=0; REFRESH_FAIL_AT=1
+reconcile_ports; [ "$state" = waiting ]; expect_members
+load_case renumber; REFRESH_CALLS=0; REFRESH_FAIL_AT=2
+reconcile_ports; [ "$state" = waiting ]; expect_members
+REFRESH_FAIL_AT=0; REFRESH_CALLS=0
+load_case renumber; reconcile_ports; [ "$state" = running ]; expect_members en8
 original_ports[0]=en7; port_kinds[0]=mobile; port_ids[0]=__IDENTITY__; port_macs[0]=-; current_ports[0]=en7; missing_counts[0]=0
 original_ports[1]=en3; port_kinds[1]=fixed; port_ids[1]=-; port_macs[1]=02:00:00:00:00:03; current_ports[1]=en3; missing_counts[1]=0
 portcount=2; portlist=en7,en3; portmap=en7:en7,en3:en3; attached_list=' en7 en3'; state=running

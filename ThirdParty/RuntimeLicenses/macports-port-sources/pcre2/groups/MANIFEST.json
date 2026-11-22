@@ -1,0 +1,10 @@
+{
+  "clang_dependency-1.0.tcl": {
+    "git_blob_sha1": "5e8adb161148ae1d1d3ab39e97df1ca0659f8230",
+    "url": "*****"
+  },
+  "github-1.0.tcl": {
+    "git_blob_sha1": "56f9d2811f375f16a71e9177d0a132e189606ca2",
+    "url": "*****"
+  }
+}

@@ -1,0 +1,91 @@
+@name libiconv-1.19_0
+@portname libiconv
+@portepoch 0
+@portversion 1.19
+@portrevision 0
+@archs arm64
+@macports_version 2.12.5
+@os.subplatform macosx
+@os.version 23.6.0
+@macos_version 14.8.8
+@xcodecltversion 15.3.0.0.1.1708487402
+@ports_commit 03b1b44cce27fbd3fee6686d4b107bcd621940c1
+@source_date_epoch 1785601986
+opt/local/bin/iconv
+@comment MD5:6e2bf2e8568dd478a399a046718efef8
+@comment binary:1
+opt/local/include/iconv.h
+@comment MD5:8d11476d832e74b0e51c019301260cca
+@comment binary:0
+opt/local/include/libcharset.h
+@comment MD5:2cdfd393d2c8e7211b241e33119fdbcb
+@comment binary:0
+opt/local/include/localcharset.h
+@comment MD5:86de194d9e938f1e68e85b14ce7c594b
+@comment binary:0
+opt/local/lib/libcharset.1.dylib
+@comment MD5:25a34f5b964e026e1a417be878a79d7f
+@comment binary:1
+opt/local/lib/libcharset.a
+@comment MD5:b788bf2d2c33152e03e919d3fbc31f51
+@comment binary:0
+opt/local/lib/libcharset.dylib
+@comment MD5:25a34f5b964e026e1a417be878a79d7f
+@comment binary:0
+opt/local/lib/libiconv.2.dylib
+@comment MD5:1bf6d2bf50a2de5a8b5874741efd8a3d
+@comment binary:1
+opt/local/lib/libiconv.a
+@comment MD5:257be2bd9f0ba4268aeb87b6749b4905
+@comment binary:0
+opt/local/lib/libiconv.dylib
+@comment MD5:1bf6d2bf50a2de5a8b5874741efd8a3d
+@comment binary:0
+opt/local/share/doc/libiconv/iconv.1.html
+@comment MD5:1acb625e453706ca5bd79c3a3eb5efa2
+@comment binary:0
+opt/local/share/doc/libiconv/iconv.3.html
+@comment MD5:608c406848a7f62ccd218cedf850fd33
+@comment binary:0
+opt/local/share/doc/libiconv/iconv_close.3.html
+@comment MD5:3b17ae0177e169244bc1da48bd80ca1a
+@comment binary:0
+opt/local/share/doc/libiconv/iconv_open.3.html
+@comment MD5:3bfb2630c602bd4e5186726f81863e93
+@comment binary:0
+opt/local/share/doc/libiconv/iconv_open_into.3.html
+@comment MD5:092007e566449e603eab90b92b93434a
+@comment binary:0
+opt/local/share/doc/libiconv/iconvctl.3.html
+@comment MD5:ad24f8a29846d2f312ebe21dcc5b38c1
+@comment binary:0
+opt/local/share/man/man1/iconv.1.gz
+@comment MD5:19127ad9436b03e243ecad0b012f75f1
+@comment binary:0
+opt/local/share/man/man3/iconv.3.gz
+@comment MD5:ffcbd4ad7575c914097c0df4efa80d60
+@comment binary:0
+opt/local/share/man/man3/iconv_close.3.gz
+@comment MD5:24a079df33eefe8ae62b99070177599a
+@comment binary:0
+opt/local/share/man/man3/iconv_open.3.gz
+@comment MD5:d805e929e03dc458a66e0db6ccdf3293
+@comment binary:0
+opt/local/share/man/man3/iconv_open_into.3.gz
+@comment MD5:1f44b102d2c895086371d4a3b88699b9
+@comment binary:0
+opt/local/share/man/man3/iconvctl.3.gz
+@comment MD5:83945f771a3ec620832b8dd481276e7d
+@comment binary:0
+@ignore
++COMMENT
+@ignore
++CONTENTS
+@ignore
++DESC
+@ignore
++PORTFILE
+@ignore
++STATE
+@cxx_stdlib none
+@cxx_stdlib_overridden 0

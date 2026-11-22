@@ -1,0 +1,736 @@
+@name pcre2-10.49_0
+@portname pcre2
+@portepoch 0
+@portversion 10.49
+@portrevision 0
+@archs arm64
+@pkgdep bzip2-1.0.8_1
+@pkgdep libedit-20260512-3.1_0
+@pkgdep zlib-1.3.2_0
+@macports_version 2.12.7
+@os.subplatform macosx
+@os.version 23.6.0
+@macos_version 14.8.9
+@xcodecltversion 16.2.0.0.1.1733547573
+@ports_commit 8cd924b447c30b25649d6e2a6e1553ce98f9fa16
+@source_date_epoch 1793415280
+opt/local/bin/pcre2-config
+@comment MD5:3ad0c204c7592461349c200fdaeb281c
+@comment binary:0
+opt/local/bin/pcre2grep
+@comment MD5:edd04544efcdae45e9f20c46fcc32d40
+@comment binary:1
+opt/local/bin/pcre2test
+@comment MD5:33a60cb655b269a17a6be2e882ab3426
+@comment binary:1
+opt/local/include/pcre2.h
+@comment MD5:e7bf25934f9281cd6d4499ffc098b571
+@comment binary:0
+opt/local/include/pcre2posix.h
+@comment MD5:7aca0b82420ee20e1dba151c37330e02
+@comment binary:0
+opt/local/lib/libpcre2-16.0.dylib
+@comment MD5:a4c0f57d60f5667b3a24832dbd0e35ff
+@comment binary:1
+opt/local/lib/libpcre2-16.a
+@comment MD5:655627888b8dda72cdb445e0af742b5d
+@comment binary:0
+opt/local/lib/libpcre2-16.dylib
+@comment MD5:a4c0f57d60f5667b3a24832dbd0e35ff
+@comment binary:0
+opt/local/lib/libpcre2-32.0.dylib
+@comment MD5:0de818c67a7f49e994a5991cd133f42d
+@comment binary:1
+opt/local/lib/libpcre2-32.a
+@comment MD5:cc06e889201bcb12a67f0226cba84b8f
+@comment binary:0
+opt/local/lib/libpcre2-32.dylib
+@comment MD5:0de818c67a7f49e994a5991cd133f42d
+@comment binary:0
+opt/local/lib/libpcre2-8.0.dylib
+@comment MD5:3e516f936b9e5c7018c530c96f19cf57
+@comment binary:1
+opt/local/lib/libpcre2-8.a
+@comment MD5:f536ffe674bf9622baeec9addd1f49fc
+@comment binary:0
+opt/local/lib/libpcre2-8.dylib
+@comment MD5:3e516f936b9e5c7018c530c96f19cf57
+@comment binary:0
+opt/local/lib/libpcre2-posix.3.dylib
+@comment MD5:ca2a3b7c175296d14ebef677afc6e1a2
+@comment binary:1
+opt/local/lib/libpcre2-posix.a
+@comment MD5:097edd15fcb73bcf1a6c45a053e30c0c
+@comment binary:0
+opt/local/lib/libpcre2-posix.dylib
+@comment MD5:ca2a3b7c175296d14ebef677afc6e1a2
+@comment binary:0
+opt/local/lib/pkgconfig/libpcre2-16.pc
+@comment MD5:1d0cf7fb188da39a888adca68456aedd
+@comment binary:0
+opt/local/lib/pkgconfig/libpcre2-32.pc
+@comment MD5:a9bfd4a97a447f52bd2f0598bdca742b
+@comment binary:0
+opt/local/lib/pkgconfig/libpcre2-8.pc
+@comment MD5:737ac78f9ca2bac0befeb7a3fc3b5d89
+@comment binary:0
+opt/local/lib/pkgconfig/libpcre2-posix.pc
+@comment MD5:487974f4effeb052dc5687862c830e38
+@comment binary:0
+opt/local/share/doc/pcre2/AUTHORS.md
+@comment MD5:5e9ae8be30d083e545c1f0c6224ac11e
+@comment binary:0
+opt/local/share/doc/pcre2/COPYING
+@comment MD5:004fc4969a3fc6b4a40abb8c655c701c
+@comment binary:0
+opt/local/share/doc/pcre2/ChangeLog
+@comment MD5:d67882c63297334b1d66d093929eb06c
+@comment binary:0
+opt/local/share/doc/pcre2/LICENCE.md
+@comment MD5:6720bf3bcff57543b915c2b22e526df0
+@comment binary:0
+opt/local/share/doc/pcre2/NEWS
+@comment MD5:87ff200959310e37b16344680725bdbe
+@comment binary:0
+opt/local/share/doc/pcre2/README
+@comment MD5:e99a5b1f75c1ef3fa997acff23510d22
+@comment binary:0
+opt/local/share/doc/pcre2/SECURITY.md
+@comment MD5:b892b49dd57df2cff350cc589ae6ce96
+@comment binary:0
+opt/local/share/doc/pcre2/SUPPORT-LIFECYCLE.md
+@comment MD5:d21e531f5b123c9b112cd5184c0f40be
+@comment binary:0
+opt/local/share/doc/pcre2/html/NON-AUTOTOOLS-BUILD.txt
+@comment MD5:0bcdd4961590c573bae4048e9f5545b2
+@comment binary:0
+opt/local/share/doc/pcre2/html/README.txt
+@comment MD5:e99a5b1f75c1ef3fa997acff23510d22
+@comment binary:0
+opt/local/share/doc/pcre2/html/index.html
+@comment MD5:cbff6bc2fab39c88a3767b4347018fae
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2-config.html
+@comment MD5:eabedc2789887d99a3ac775cb539ce24
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2.html
+@comment MD5:ca8f7b99341540264e6606437af05ef6
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_callout_enumerate.html
+@comment MD5:5dbc0694a5293e8ca86ad0eef791312a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_code_copy.html
+@comment MD5:dccdd4fce4324c1a395bc7b8793d7237
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_code_copy_with_tables.html
+@comment MD5:1a6444ea21638048b741fe0eff5dff10
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_code_free.html
+@comment MD5:05342ef2d7749063fa5d42cee735767f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_compile.html
+@comment MD5:c842abbb57bf6ec0f242703f3977bfac
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_compile_context_copy.html
+@comment MD5:cbd6ddf20f047fdd5039342d87e37003
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_compile_context_create.html
+@comment MD5:41ccc07a5720fcaadd64a09efee4c782
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_compile_context_free.html
+@comment MD5:9e982fb5cb0994a719ddd30d84970bc3
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_config.html
+@comment MD5:88b89e7524f53e38c405fc26160c4483
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_convert_context_copy.html
+@comment MD5:ce9a2390e3eca0ef51dac7c4b4674e0c
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_convert_context_create.html
+@comment MD5:dbc639d5e7d3d63de68e32740b5b681a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_convert_context_free.html
+@comment MD5:c2464bc940a4b093986b112f681c158e
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_converted_pattern_free.html
+@comment MD5:0a5f95652e1920c81aa7012ae8d707b8
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_dfa_match.html
+@comment MD5:3de2b21036536d1667fadbfba50e56b8
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_general_context_copy.html
+@comment MD5:bb90b3371288464d025dbeda1ac7a26a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_general_context_create.html
+@comment MD5:505cc9c6b9ea2f042e26cfa3cbbfd036
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_general_context_free.html
+@comment MD5:5cc7520d001428302ddffdee6c14d0d0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_error_message.html
+@comment MD5:f95f6a3e5cad7e6a297f7c5bb5d557ab
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_mark.html
+@comment MD5:f5c900e5da0ed922e187667080b98be0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_match_data_heapframes_size.html
+@comment MD5:d2fe562e7942bb9dcf982fc151b95ce6
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_match_data_size.html
+@comment MD5:beea76e06fbbf18c5a8398796e79f6c4
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_ovector_count.html
+@comment MD5:6dc6d16f4716471d7a28d571e33a66f8
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_ovector_pointer.html
+@comment MD5:cb9177aafd0a52eadbcd30bb544dca10
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_get_startchar.html
+@comment MD5:3d3b8faf9c40919481602754f09d22a0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_jit_compile.html
+@comment MD5:c8abd6ecce30ff75cefc853aa57e3476
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_jit_free_unused_memory.html
+@comment MD5:46acbd0257570373f6bcb89ebb8a8c0a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_jit_match.html
+@comment MD5:cb518e669629abb0f17b951eceea860f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_jit_stack_assign.html
+@comment MD5:fc09070fb8ea2e155cde0f4e16aaa4d0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_jit_stack_create.html
+@comment MD5:a91057cc348b64bf484dc5011dfeb99b
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_jit_stack_free.html
+@comment MD5:e4f6ecb8b09f9f8e6934026dd7a980ae
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_maketables.html
+@comment MD5:a43b2ae7b785fba642ba908fb90ea188
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_maketables_free.html
+@comment MD5:0ac5b4ab1b48c0ec514a7bef4b02b290
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match.html
+@comment MD5:9fd412c42bbcdc88e91b4a1a82d73ea2
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match_context_copy.html
+@comment MD5:60be92c664238db6c3c27cb1ed53d0cb
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match_context_create.html
+@comment MD5:d05fdd1c6b50b35d429080599111e9c1
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match_context_free.html
+@comment MD5:8dfbd6274b8e7a936d37de5e022961aa
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match_data_create.html
+@comment MD5:8c70a66aafff6b4b8c049c6104f28c68
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match_data_create_from_pattern.html
+@comment MD5:db144e82987b5c97bff55a56449bc33e
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_match_data_free.html
+@comment MD5:e59b80d04f434da215d9ef4c01d4af3a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_next_match.html
+@comment MD5:489a8c80edf95870555c0ffd65e1098a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_pattern_convert.html
+@comment MD5:07e40f43460ce7f30a02151a5cbc6c41
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_pattern_info.html
+@comment MD5:5f9e2566d66012c249c2d0ef7f0b8ea4
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_serialize_decode.html
+@comment MD5:fcad071f38f6f08ebe7ebc4ac9513370
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_serialize_encode.html
+@comment MD5:9fb64de088867e73c3d525c5f4348af8
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_serialize_free.html
+@comment MD5:7d08da68040d1c9666914b7857e80d3f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_serialize_get_number_of_codes.html
+@comment MD5:076367a835ecbc5856d6b5d45ae93113
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_bsr.html
+@comment MD5:4b72251c49e04c545319c2a01dd6278f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_callout.html
+@comment MD5:0c0a20896399474a2069c1a747b67761
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_character_tables.html
+@comment MD5:46151200ee277b57ca846f25bf865139
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_compile_extra_options.html
+@comment MD5:a61f85017c110542c307c3302344aa6f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_compile_recursion_guard.html
+@comment MD5:87e2669c1550691544c443d9f3a83055
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_depth_limit.html
+@comment MD5:bee0f659dba4a5326bb71961e3d08d8a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_glob_escape.html
+@comment MD5:f02e74208b0c5814515d839fbbcdc664
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_glob_separator.html
+@comment MD5:e908bc706c11e9662613f0c57d6b8f84
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_heap_limit.html
+@comment MD5:89fea6010b2e4cd6bd669929bdfadc41
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_match_limit.html
+@comment MD5:0f1fb5f4266da6f2db0ab3d42b2b95e5
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_max_pattern_compiled_length.html
+@comment MD5:a4d6e18327bd4294b16c7d7847d46196
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_max_pattern_length.html
+@comment MD5:80cbe7673746dd4234868b891d6a786d
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_max_varlookbehind.html
+@comment MD5:0e2ca8612375e870d37bec86748c5cf3
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_newline.html
+@comment MD5:45aec45a6c6223a29acc9accc54e414d
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_offset_limit.html
+@comment MD5:05f104eb7dd564d1e7462a9c933e6f3b
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_optimize.html
+@comment MD5:c3830767d824566cba16b49dbc9b9a29
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_parens_nest_limit.html
+@comment MD5:508db965f5e4e2c6751f27bcda191571
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_recursion_limit.html
+@comment MD5:1d3b1e39cb141ebaa3fdd57ea36e19e1
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_recursion_memory_management.html
+@comment MD5:d04e8e6574789097fdadd8eafa8b4c80
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_substitute_callout.html
+@comment MD5:e0fcb09a753291d71ce961c9ffccb2e2
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_set_substitute_case_callout.html
+@comment MD5:3e67009078fd9e46a4d2ce9b3fb7b09d
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substitute.html
+@comment MD5:3e2da0cdf657557ab8c19cf514f9fe99
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_copy_byname.html
+@comment MD5:171f48b406cfc9513c0815ea1460a801
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_copy_bynumber.html
+@comment MD5:8a0b9117a2e5e42afbcad239eb2f6de5
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_free.html
+@comment MD5:a4ca48900a44265832106cb974d30df0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_get_byname.html
+@comment MD5:b4e4d9b169e272c089752e5608b05b1e
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_get_bynumber.html
+@comment MD5:cd1ae6b1831a9102c047a755d965b129
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_length_byname.html
+@comment MD5:cfc1aa5a1d8a4f55d0aba1abfb712378
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_length_bynumber.html
+@comment MD5:80d1136536e57d9b15051608f0e38dcc
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_list_free.html
+@comment MD5:d13d77c837824d2e6d8e26dbaa3db2f4
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_list_get.html
+@comment MD5:eaddab210a0c1f75f953126c417686aa
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_nametable_scan.html
+@comment MD5:4807ef1d537e7596b0fae293c189e1d1
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2_substring_number_from_name.html
+@comment MD5:7d3a2252bf5753dbe8486bfe41b523f0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2api.html
+@comment MD5:0625d9c6e999dac2efad54b3c934b804
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2build.html
+@comment MD5:685a134e0e4d06b94a069ab7755a4e67
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2callout.html
+@comment MD5:950bf67cc531a31b46fcf9fe86a432ce
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2compat.html
+@comment MD5:37eae83a5426689c622d0530a6783ea9
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2convert.html
+@comment MD5:383e4cb7426b8ce69def16f954a90f2d
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2demo.html
+@comment MD5:2125d6011afb6eb1acef5166e90609e6
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2grep.html
+@comment MD5:b25b60127fdaff593235ae84f28ceca3
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2jit.html
+@comment MD5:c00307439ff4ca140f2cd80745249c6f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2limits.html
+@comment MD5:b51a93f0a9db99abcb4d184003fbb773
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2matching.html
+@comment MD5:d6e929e67b123d38a466b2c5a92ca6d1
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2partial.html
+@comment MD5:f77af07ec7913b7cce08415c02de153f
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2pattern.html
+@comment MD5:727b87d95f02e93e3795c7818805c236
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2perform.html
+@comment MD5:ba4dfb84e61869e86e56e5c3d2d96e4d
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2posix.html
+@comment MD5:063a4c886d59f76bb74e480b24b481a9
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2sample.html
+@comment MD5:b77251b0536a86448ba63810f0d951a0
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2serialize.html
+@comment MD5:115684f1ccfa2f51fd0abbf32d343a7a
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2syntax.html
+@comment MD5:9cab7d4132f958dfa32e363a4556bbbc
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2test.html
+@comment MD5:b513f29f2bfc60a9976dbe23e7263d29
+@comment binary:0
+opt/local/share/doc/pcre2/html/pcre2unicode.html
+@comment MD5:88d52843fda0b76314ea4f45d5144a6d
+@comment binary:0
+opt/local/share/doc/pcre2/pcre2-config.txt
+@comment MD5:323b0a5ba7d39c8e59c2586806096564
+@comment binary:0
+opt/local/share/doc/pcre2/pcre2.txt
+@comment MD5:6c0996ccf76356c336810fba1337b927
+@comment binary:0
+opt/local/share/doc/pcre2/pcre2grep.txt
+@comment MD5:68369e39a8a80d6f550b0b1aca05917d
+@comment binary:0
+opt/local/share/doc/pcre2/pcre2test.txt
+@comment MD5:6d0d50107abd59025c3ce1a42a5637a0
+@comment binary:0
+opt/local/share/man/man1/pcre2-config.1.gz
+@comment MD5:9911f0bd6712b83e4d0b120271aa7ae6
+@comment binary:0
+opt/local/share/man/man1/pcre2grep.1.gz
+@comment MD5:cbefd67c8ab69fe3b1903b7370ed816c
+@comment binary:0
+opt/local/share/man/man1/pcre2test.1.gz
+@comment MD5:16f10cf3d0cf7e9438ecc763137ce710
+@comment binary:0
+opt/local/share/man/man3/pcre2.3.gz
+@comment MD5:135e32c8e4658d07b0b854cb91edfe36
+@comment binary:0
+opt/local/share/man/man3/pcre2_callout_enumerate.3.gz
+@comment MD5:6787b3ee82f29f22da6d84a0205856cf
+@comment binary:0
+opt/local/share/man/man3/pcre2_code_copy.3.gz
+@comment MD5:aef783f48b3cacda7c1f9701db7a901f
+@comment binary:0
+opt/local/share/man/man3/pcre2_code_copy_with_tables.3.gz
+@comment MD5:e1937004e9537e38d189b81fb005591a
+@comment binary:0
+opt/local/share/man/man3/pcre2_code_free.3.gz
+@comment MD5:8977cef72e8c969a16dd76016b52ac66
+@comment binary:0
+opt/local/share/man/man3/pcre2_compile.3.gz
+@comment MD5:3032d1b573d667e1afb20d9b08e53d97
+@comment binary:0
+opt/local/share/man/man3/pcre2_compile_context_copy.3.gz
+@comment MD5:3e6222be90ce4b0c5bffb8496abc97ba
+@comment binary:0
+opt/local/share/man/man3/pcre2_compile_context_create.3.gz
+@comment MD5:7c8179876476d02605e574e86ceb0c2a
+@comment binary:0
+opt/local/share/man/man3/pcre2_compile_context_free.3.gz
+@comment MD5:0323821dab5349f1a21b7ca37946aabd
+@comment binary:0
+opt/local/share/man/man3/pcre2_config.3.gz
+@comment MD5:3e0039e16b24153f0b661e10ca43fca6
+@comment binary:0
+opt/local/share/man/man3/pcre2_convert_context_copy.3.gz
+@comment MD5:a18e2dd0c28340872513a55d528a11f3
+@comment binary:0
+opt/local/share/man/man3/pcre2_convert_context_create.3.gz
+@comment MD5:72a520b8268d840418ce22c139b04493
+@comment binary:0
+opt/local/share/man/man3/pcre2_convert_context_free.3.gz
+@comment MD5:06b5e1dd5b901222be80265f3ec0ffe3
+@comment binary:0
+opt/local/share/man/man3/pcre2_converted_pattern_free.3.gz
+@comment MD5:3bfae81507c8a3919dad3485328b47b9
+@comment binary:0
+opt/local/share/man/man3/pcre2_dfa_match.3.gz
+@comment MD5:05f7049af2c4b0f010c84791a2e66d6e
+@comment binary:0
+opt/local/share/man/man3/pcre2_general_context_copy.3.gz
+@comment MD5:a3ccb19ee4607f3ddf3c613930ac628e
+@comment binary:0
+opt/local/share/man/man3/pcre2_general_context_create.3.gz
+@comment MD5:e299fc73481f035f0e3c0436c20063b4
+@comment binary:0
+opt/local/share/man/man3/pcre2_general_context_free.3.gz
+@comment MD5:9f1781825a5ca552b45c98a9709b3534
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_error_message.3.gz
+@comment MD5:19e024bb99d3e5a39df41a4cb78c48a3
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_mark.3.gz
+@comment MD5:9e21a48e83fa4052aa6125bb71b4a576
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_match_data_heapframes_size.3.gz
+@comment MD5:0ab43f63f545abb93f0da501f559f4ae
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_match_data_size.3.gz
+@comment MD5:22918a10025777900b86760327179201
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_ovector_count.3.gz
+@comment MD5:55186f13c40d6fb1b74d4e7c1b1af379
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_ovector_pointer.3.gz
+@comment MD5:2d8919cf1ab8898770eebce906af06ad
+@comment binary:0
+opt/local/share/man/man3/pcre2_get_startchar.3.gz
+@comment MD5:8a16f30145c66dfaa237ab1ac4892775
+@comment binary:0
+opt/local/share/man/man3/pcre2_jit_compile.3.gz
+@comment MD5:a04ad68d9d75cd49a1c30ad6630e43ff
+@comment binary:0
+opt/local/share/man/man3/pcre2_jit_free_unused_memory.3.gz
+@comment MD5:739ee8de7655b272f2904ac6d6f144ac
+@comment binary:0
+opt/local/share/man/man3/pcre2_jit_match.3.gz
+@comment MD5:4e6d0156a6c25f515bc78867ed79475b
+@comment binary:0
+opt/local/share/man/man3/pcre2_jit_stack_assign.3.gz
+@comment MD5:d969a17f2961151cc9f17dbaf5ad0068
+@comment binary:0
+opt/local/share/man/man3/pcre2_jit_stack_create.3.gz
+@comment MD5:de4e2f38d13b830bfcadde52fdba3317
+@comment binary:0
+opt/local/share/man/man3/pcre2_jit_stack_free.3.gz
+@comment MD5:bcb0f35a392b98080e8a0bd3c18809b0
+@comment binary:0
+opt/local/share/man/man3/pcre2_maketables.3.gz
+@comment MD5:2e26b1631ecfed4baf6dc60d4bc0ac51
+@comment binary:0
+opt/local/share/man/man3/pcre2_maketables_free.3.gz
+@comment MD5:8ae6a5dedaacfb7e536792520ec9049c
+@comment binary:0
+opt/local/share/man/man3/pcre2_match.3.gz
+@comment MD5:b2aeefe3687da8c6f85743d77b388cf0
+@comment binary:0
+opt/local/share/man/man3/pcre2_match_context_copy.3.gz
+@comment MD5:c8a1be27110a3190522d9921bc61cd71
+@comment binary:0
+opt/local/share/man/man3/pcre2_match_context_create.3.gz
+@comment MD5:b0e09f6d43adde307a68509b0c2e1a50
+@comment binary:0
+opt/local/share/man/man3/pcre2_match_context_free.3.gz
+@comment MD5:2f3372b2790898f08e986a064a172ecb
+@comment binary:0
+opt/local/share/man/man3/pcre2_match_data_create.3.gz
+@comment MD5:6c615be3143433cda69d72c4df4e1054
+@comment binary:0
+opt/local/share/man/man3/pcre2_match_data_create_from_pattern.3.gz
+@comment MD5:656be1615c4bdac0c572f2b12a760692
+@comment binary:0
+opt/local/share/man/man3/pcre2_match_data_free.3.gz
+@comment MD5:652b769cd9fca7be5904bebecd8147eb
+@comment binary:0
+opt/local/share/man/man3/pcre2_next_match.3.gz
+@comment MD5:7d362344c0c57eb6cea83827e31f3d62
+@comment binary:0
+opt/local/share/man/man3/pcre2_pattern_convert.3.gz
+@comment MD5:099e6bb29ff58f85873d2fbd34800512
+@comment binary:0
+opt/local/share/man/man3/pcre2_pattern_info.3.gz
+@comment MD5:e9a1ae7372218ff9fd682fcd8f6690c5
+@comment binary:0
+opt/local/share/man/man3/pcre2_serialize_decode.3.gz
+@comment MD5:a4bebb7cfd2796712a9a57a1c689229b
+@comment binary:0
+opt/local/share/man/man3/pcre2_serialize_encode.3.gz
+@comment MD5:f927c5ed066ccd32b3bc8d06dbd2de6b
+@comment binary:0
+opt/local/share/man/man3/pcre2_serialize_free.3.gz
+@comment MD5:c39c57cfff0d1efd2ecf87e5585af5cc
+@comment binary:0
+opt/local/share/man/man3/pcre2_serialize_get_number_of_codes.3.gz
+@comment MD5:7b54e702579a5c2fd26cf82b520cb438
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_bsr.3.gz
+@comment MD5:956a49b4e66b9c7d5d3305322f7c5405
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_callout.3.gz
+@comment MD5:8a15622a80fc1e291750dc30365a5122
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_character_tables.3.gz
+@comment MD5:8e8a552707dfaa458a5483c061dd5247
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_compile_extra_options.3.gz
+@comment MD5:ba89a13972356e70d77104f2f3e371ad
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_compile_recursion_guard.3.gz
+@comment MD5:216afdf29bce309a5d0b90f73c9acc15
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_depth_limit.3.gz
+@comment MD5:4190e8a6abbb68d33ba811b286bd7202
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_glob_escape.3.gz
+@comment MD5:6770e80a784b2c137e5c7169c6d5a2b6
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_glob_separator.3.gz
+@comment MD5:802ee27937c610802f76f5fe5d395bcd
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_heap_limit.3.gz
+@comment MD5:5c7ccee574a4c49175b98fa33c568af7
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_match_limit.3.gz
+@comment MD5:12938e35ea5e427a1da223bde9c02365
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_max_pattern_compiled_length.3.gz
+@comment MD5:e258e9b327f3d864fc853aa67b37db45
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_max_pattern_length.3.gz
+@comment MD5:e46e907464a55f545c43cedd1c24102c
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_max_varlookbehind.3.gz
+@comment MD5:c17a71585df1918d135509713b91ae8d
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_newline.3.gz
+@comment MD5:f9909efc34457bd88e86512fa1940639
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_offset_limit.3.gz
+@comment MD5:640476f4eb2e18b306ab09cd3d4eba8f
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_optimize.3.gz
+@comment MD5:8e748b4295eb1b33f6b090b6f6c0be73
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_parens_nest_limit.3.gz
+@comment MD5:1446eaa0a696f65aca59d7db78952d19
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_recursion_limit.3.gz
+@comment MD5:644ed0bae1a3acf21ad10cc259156305
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_recursion_memory_management.3.gz
+@comment MD5:8787c18881fbd68d177b377a3213e617
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_substitute_callout.3.gz
+@comment MD5:34306354c1fff23e118c497702921515
+@comment binary:0
+opt/local/share/man/man3/pcre2_set_substitute_case_callout.3.gz
+@comment MD5:edef9c78ed7b8c1af112dd36e26803f2
+@comment binary:0
+opt/local/share/man/man3/pcre2_substitute.3.gz
+@comment MD5:bfa80bb61bf5ea915e29c30e30a39ea3
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_copy_byname.3.gz
+@comment MD5:21035ab954505557f5842eb9d31dbf50
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_copy_bynumber.3.gz
+@comment MD5:56414b41fb5167a0fba5fdee8f6004c7
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_free.3.gz
+@comment MD5:ce79d325711f64c19f76422e24e62112
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_get_byname.3.gz
+@comment MD5:61f9673c02b81247a8dbe9083e800095
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_get_bynumber.3.gz
+@comment MD5:a232eff28e29c61b8172d19a6a400427
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_length_byname.3.gz
+@comment MD5:703983921c339e87f4df21851a8a46cd
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_length_bynumber.3.gz
+@comment MD5:25481f4125f4d01e2a08c03ff3196b09
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_list_free.3.gz
+@comment MD5:53be9e643f75e4a901834c1d3d4ce02d
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_list_get.3.gz
+@comment MD5:febd52c2a7ea7bfb51c94cafc4170c86
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_nametable_scan.3.gz
+@comment MD5:49bcedacd173b95324785b09529630e1
+@comment binary:0
+opt/local/share/man/man3/pcre2_substring_number_from_name.3.gz
+@comment MD5:d0eaf0af98423f2df84db386b8aebd0d
+@comment binary:0
+opt/local/share/man/man3/pcre2api.3.gz
+@comment MD5:7c53041277f771162dc33b72646d62e1
+@comment binary:0
+opt/local/share/man/man3/pcre2build.3.gz
+@comment MD5:8c4b58cd2c823a9f36f52f48746a9644
+@comment binary:0
+opt/local/share/man/man3/pcre2callout.3.gz
+@comment MD5:0f1ab0ba6742cdebb9ac8644658396f0
+@comment binary:0
+opt/local/share/man/man3/pcre2compat.3.gz
+@comment MD5:4cc4fe4944547b4e742c8fd0c52c3638
+@comment binary:0
+opt/local/share/man/man3/pcre2convert.3.gz
+@comment MD5:c8beaad07fafa1067a9599318d8ff7ad
+@comment binary:0
+opt/local/share/man/man3/pcre2demo.3.gz
+@comment MD5:4513fa1decb207c42f69a4de2017c107
+@comment binary:0
+opt/local/share/man/man3/pcre2jit.3.gz
+@comment MD5:92692499739b77c02e00d61cb4f448e2
+@comment binary:0
+opt/local/share/man/man3/pcre2limits.3.gz
+@comment MD5:8f1d459e53106ccc13e03acc990dfd10
+@comment binary:0
+opt/local/share/man/man3/pcre2matching.3.gz
+@comment MD5:79c3125891717aca6c8c593c43021c35
+@comment binary:0
+opt/local/share/man/man3/pcre2partial.3.gz
+@comment MD5:6e93f2a02efb9ec6c1e5944336ba80c2
+@comment binary:0
+opt/local/share/man/man3/pcre2pattern.3.gz
+@comment MD5:0fe64b51f4c4e28c0b874cd31adb8cd9
+@comment binary:0
+opt/local/share/man/man3/pcre2perform.3.gz
+@comment MD5:b0ed61f9630b6f7f6515d06b89453723
+@comment binary:0
+opt/local/share/man/man3/pcre2posix.3.gz
+@comment MD5:5e326884c774135f71a89aa17d1a3da7
+@comment binary:0
+opt/local/share/man/man3/pcre2sample.3.gz
+@comment MD5:20139bba97ade70334449c4c0bccaa9f
+@comment binary:0
+opt/local/share/man/man3/pcre2serialize.3.gz
+@comment MD5:fa2828a77ead2bdf0661fd73103b0649
+@comment binary:0
+opt/local/share/man/man3/pcre2syntax.3.gz
+@comment MD5:b6c69e5e9696fd75a5afce84148285c1
+@comment binary:0
+opt/local/share/man/man3/pcre2unicode.3.gz
+@comment MD5:35e13fb0a50ebbe9aeccd7c8c5564d2d
+@comment binary:0
+@ignore
++COMMENT
+@ignore
++CONTENTS
+@ignore
++DESC
+@ignore
++PORTFILE
+@ignore
++STATE
+@cxx_stdlib none
+@cxx_stdlib_overridden 0

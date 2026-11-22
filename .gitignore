@@ -4,9 +4,7 @@ __pycache__/
 *.pyc
 .DS_Store
 /HotspotLab
-/mock_dispatcher
 /socks_gateway
 /session_supervisor
 /subnet_guard
 /lease_store
-/private_runtime.dylib

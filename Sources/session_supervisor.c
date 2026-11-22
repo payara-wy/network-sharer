@@ -18,10 +18,10 @@
 #define NETWORKSHARER_SESSION_ROOT "/private/tmp"
 #endif
 #ifndef NETWORKSHARER_LOCK_PATH
-#define NETWORKSHARER_LOCK_PATH "/private/tmp/com.local.networksharer.session.lock"
+#define NETWORKSHARER_LOCK_PATH "/private/tmp/com.local.lansharer.session.lock"
 #endif
 
-#define SESSION_PREFIX "networksharer."
+#define SESSION_PREFIX "lanproxy."
 #define SESSION_MARKER "NetworkSharerSession/1\n"
 
 static int session_name_valid(const char *name) {
@@ -61,6 +61,8 @@ static int session_owner_gone(int dir) {
     if (pid<2 || (*end && *end!='\n')) return 0;
     return kill((pid_t)pid,0)<0 && errno==ESRCH;
 }
+/* Session state is shared with the graphical app, so an empty daemon_pid is
+ * normal for a LAN-only session; a stale record must still be collectable. */
 static int session_finished(int dir) {
     int fd=openat(dir,"state",O_RDONLY|O_NOFOLLOW|O_CLOEXEC);
     if (fd<0) return 0;
@@ -69,16 +71,22 @@ static int session_finished(int dir) {
     close(fd);
     if (!safe || n<1) return 0;
     buf[n]='\0'; char *save=NULL, *line=strtok_r(buf,"\n",&save);
-    int finished=0; long pid=0;
+    int finished=0; long daemon=0,gateway=0;
     while (line) {
         if (!strcmp(line,"state=stopped") || !strcmp(line,"state=error")) finished=1;
         if (!strncmp(line,"daemon_pid=",11)) {
             char *end=NULL; long value=strtol(line+11,&end,10);
-            if (end && !*end && value>1) pid=value;
+            if (end && !*end && value>1) daemon=value;
+        }
+        if (!strncmp(line,"gateway_pid=",12)) {
+            char *end=NULL; long value=strtol(line+12,&end,10);
+            if (end && !*end && value>1) gateway=value;
         }
         line=strtok_r(NULL,"\n",&save);
     }
-    return finished || (pid>1 && kill((pid_t)pid,0)<0 && errno==ESRCH);
+    int daemon_gone=daemon>1 && kill((pid_t)daemon,0)<0 && errno==ESRCH;
+    int gateway_gone=gateway>1 && kill((pid_t)gateway,0)<0 && errno==ESRCH;
+    return finished || daemon_gone || gateway_gone;
 }
 static int write_file(int dir,const char *name,const char *value) {
     int fd=openat(dir,name,O_WRONLY|O_CREAT|O_TRUNC|O_NOFOLLOW|O_CLOEXEC,0600);
@@ -97,7 +105,8 @@ static void remove_session(const char *path) {
     if (child==0) { execl("/bin/rm","rm","-rf","--",path,(char *)NULL); _exit(127); }
     if (child>0) { int status; while (waitpid(child,&status,0)<0 && errno==EINTR) {} }
 }
-static void clean_old_sessions(const char *current) {
+static void recover_interfaces(const char *engine,const char *session);
+static void clean_old_sessions(const char *current,const char *engine) {
     DIR *root=opendir(NETWORKSHARER_SESSION_ROOT); if (!root) return;
     struct dirent *item;
     while ((item=readdir(root))) {
@@ -109,7 +118,7 @@ static void clean_old_sessions(const char *current) {
         if (dir<0) continue;
         int stale=marked_session(dir) && (session_owner_gone(dir) || session_finished(dir));
         close(dir);
-        if (stale) remove_session(path);
+        if (stale) { recover_interfaces(engine,path); remove_session(path); }
     }
     closedir(root);
 }
@@ -123,9 +132,26 @@ static void publish_error(int dir) {
     if (write_file(dir,"state.recover",message)) (void)renameat(dir,"state.recover",dir,"state");
     (void)unlinkat(dir,"auth",0);
 }
+/* The controller's EXIT trap cannot run after SIGKILL. Re-run its guarded,
+ * idempotent interface cleanup before dropping the session lock. */
+static void recover_interfaces(const char *engine,const char *session) {
+    char path[4096];
+    int n=snprintf(path,sizeof(path),"%s/interfaces",session);
+    if (n<0 || (size_t)n>=sizeof(path) || access(path,F_OK)!=0) return;
+    pid_t child=fork();
+    if (child==0) {
+        execl("/bin/bash","bash",engine,"_recover",session,(char *)NULL);
+        _exit(127);
+    }
+    if (child>0) {
+        int status;
+        while (waitpid(child,&status,0)<0 && errno==EINTR) {}
+    }
+}
 int main(int argc,char **argv) {
-    /* dir, engine, owner uid, owner pid, source, mode, proxy, dns, backup, port... */
-    if (argc<11) return 2;
+    /* dir, engine, owner uid, owner pid, source, mode, proxy, dns, backup, port...
+     * The port list may be empty: a LAN-only proxy session has no downstream port. */
+    if (argc<10) return 2;
     int dir=open_session(argv[1]);
     if (dir<0 || !marked_session(dir)) return 2;
     char *end=NULL; long owner=strtol(argv[3],&end,10);
@@ -145,7 +171,7 @@ int main(int argc,char **argv) {
     if (flock(lock,LOCK_EX|LOCK_NB)) { write_file(dir,"supervisor.status","busy\n"); return 3; }
     int queue=kqueue();
     if (queue<0 || !watch_process(queue,(pid_t)gui)) { write_file(dir,"supervisor.status","owner_gone\n"); return 3; }
-    clean_old_sessions(argv[1]);
+    clean_old_sessions(argv[1],argv[2]);
     pid_t controller=fork();
     if (controller==0) {
         char **args=calloc((size_t)argc+2,sizeof(char *));
@@ -169,6 +195,7 @@ int main(int argc,char **argv) {
     }
     int status=0;
     while (waitpid(controller,&status,0)<0 && errno==EINTR) {}
+    recover_interfaces(argv[2],argv[1]);
     /* A fatal controller signal skips the shell's EXIT trap. Children watch
        their parent and stop; keep the lock while they release their sockets. */
     if (access(argv[1],F_OK)==0) {

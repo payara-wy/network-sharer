@@ -13,7 +13,7 @@
 #ifndef NETWORKSHARER_EXPECTED_UID
 #define NETWORKSHARER_EXPECTED_UID 0
 #endif
-#define DIRECTORY "com.local.networksharer"
+#define DIRECTORY "com.local.lansharer"
 #define FILE_NAME "dhcp-leases.ini"
 
 static int safe_directory(int fd,mode_t forbidden) {

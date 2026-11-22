@@ -3,23 +3,23 @@
 from pathlib import Path
 import shutil
 import uuid
-import test_feth_sessions as test
+import test_standalone_feth_sessions as test
 
 workspace=Path('/private/tmp')/('networksharer-validation-'+str(uuid.uuid4()).upper())
 workspace.mkdir(mode=0o700)
 try:
     root=workspace/'root'
-    app=root/'build'/'网络共享器正式版'/'网络共享器.app'
+    app=root/'build'/'局域网代理共享器正式版'/'局域网代理共享器.app'
     engine=app/'Contents/Resources/engine.sh'
     engine.parent.mkdir(parents=True)
-    source='lease=/private/var/db/com.local.networksharer/dhcp-leases.ini\nallow=/private/var/db/com.local.networksharer\n'
+    source='lease=/private/var/db/com.local.lansharer/dhcp-leases.ini\n'
     engine.write_text(source)
     test.ROOT=root; test.APP=app; test.ENGINE=engine
     commands=[]; test.run=lambda *args,**kwargs: commands.append(args)
     test.prepare_isolated_lease_test(workspace/'leases')
     modified=engine.read_text()
-    assert '/private/var/db/com.local.networksharer' not in modified
-    assert modified.count(str(workspace/'leases'/'com.local.networksharer'))==2
+    assert '/private/var/db/com.local.lansharer' not in modified
+    assert modified.count(str(workspace/'leases'/'com.local.lansharer'))==1
     assert len(commands)==3 and str(root) in str(commands[0])
 
     shutil.rmtree(app)

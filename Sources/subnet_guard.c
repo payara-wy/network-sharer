@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 static int overlaps_shared_subnet(uint32_t address,uint32_t mask) {
-    const uint32_t shared=0xac1e4d00u, shared_mask=0xffffff00u;
+    const uint32_t shared=0xac1e4f00u, shared_mask=0xffffff00u;
     if (!mask) return 0;
     uint32_t inverse=~mask;
     if (inverse && (inverse & (inverse+1))) return 0;

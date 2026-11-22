@@ -1,0 +1,22 @@
+{
+  "clang_dependency-1.0.tcl": {
+    "git_blob_sha1": "2bd42e0f8cf493dfa124fc4f14556e901aa850e0",
+    "url": "*****"
+  },
+  "debug-1.0.tcl": {
+    "git_blob_sha1": "0164a6b2d03fabac959b8396ee143fe35a0d8b4e",
+    "url": "*****"
+  },
+  "legacysupport-1.1.tcl": {
+    "git_blob_sha1": "575322c54dcbfe3ee2e19c866a3c7cba55c20281",
+    "url": "*****"
+  },
+  "meson-1.0.tcl": {
+    "git_blob_sha1": "58e04272d2de369cefa88eb17f6eb4466f70919e",
+    "url": "*****"
+  },
+  "muniversal-1.0.tcl": {
+    "git_blob_sha1": "0f816ee02e7aab5b73acef1581457e4db6fadf53",
+    "url": "*****"
+  }
+}

@@ -24,6 +24,8 @@ struct CommandResult {
     let error: String
 }
 
+/// Drain both pipes concurrently. Reading stdout to EOF before touching
+/// stderr can deadlock when the child fills the stderr buffer first.
 func runCommand(_ executable: String, _ arguments: [String], environment: [String: String]? = nil) -> CommandResult {
     let task = Process()
     let out = Pipe()
@@ -35,15 +37,26 @@ func runCommand(_ executable: String, _ arguments: [String], environment: [Strin
     if let environment { task.environment = environment }
     do {
         try task.run()
-        let output = out.fileHandleForReading.readDataToEndOfFile()
-        let error = err.fileHandleForReading.readDataToEndOfFile()
-        task.waitUntilExit()
-        return CommandResult(status: task.terminationStatus,
-                             output: String(decoding: output, as: UTF8.self),
-                             error: String(decoding: error, as: UTF8.self))
     } catch {
         return CommandResult(status: -1, output: "", error: error.localizedDescription)
     }
+    let collected = DispatchGroup()
+    var output = Data(), error = Data()
+    collected.enter()
+    DispatchQueue.global(qos: .utility).async {
+        output = out.fileHandleForReading.readDataToEndOfFile()
+        collected.leave()
+    }
+    collected.enter()
+    DispatchQueue.global(qos: .utility).async {
+        error = err.fileHandleForReading.readDataToEndOfFile()
+        collected.leave()
+    }
+    collected.wait()
+    task.waitUntilExit()
+    return CommandResult(status: task.terminationStatus,
+                         output: String(decoding: output, as: UTF8.self),
+                         error: String(decoding: error, as: UTF8.self))
 }
 
 func shellQuote(_ value: String) -> String {
@@ -100,12 +113,17 @@ func stateValues(_ path: String) -> [String: String] {
 func sessionPossiblyActive(_ values: [String: String], statePath: String) -> Bool {
     let state = values["state"] ?? ""
     guard state == "running" || state == "waiting" || state == "starting" else { return false }
-    if let text = values["daemon_pid"], let pid = Int32(text), pid > 1 {
+    // A running session owns a daemon when it has downstream ports and always
+    // owns the gateway. Both must still exist; a LAN-only session has no daemon.
+    let daemon = Int32(values["daemon_pid"] ?? "")
+    let gateway = Int32(values["gateway_pid"] ?? "")
+    if let pid = daemon, pid > 1, Darwin.kill(pid, 0) != 0 && errno == ESRCH { return false }
+    if let pid = gateway, pid > 1 {
         if Darwin.kill(pid, 0) == 0 || errno == EPERM { return true }
         if errno == ESRCH { return false }
         return true
     }
-    guard state == "starting" else { return true }
+    if daemon != nil || state != "starting" { return true }
     let attributes = try? FileManager.default.attributesOfItem(atPath: statePath)
     guard let changed = attributes?[.modificationDate] as? Date else { return true }
     return Date().timeIntervalSince(changed) < 90
@@ -114,18 +132,18 @@ func sessionPossiblyActive(_ values: [String: String], statePath: String) -> Boo
 func observedClients(_ bridge: String) -> String {
     guard bridge.hasPrefix("bridge") else { return "未发现" }
     let output = runCommand("/usr/sbin/arp", ["-an", "-i", bridge]).output
-    let re = try? NSRegularExpression(pattern: #"\((172\.30\.77\.[0-9]+)\)"#)
+    let re = try? NSRegularExpression(pattern: #"\((172\.30\.79\.[0-9]+)\)"#)
     let range = NSRange(output.startIndex..<output.endIndex, in: output)
     let addresses = re?.matches(in: output, range: range).compactMap { match -> String? in
         guard let r = Range(match.range(at: 1), in: output) else { return nil }
         let value = String(output[r])
-        return value == "172.30.77.1" || value == "172.30.77.2" ? nil : value
+        return value == "172.30.79.1" || value == "172.30.79.2" ? nil : value
     } ?? []
     let unique = Array(Set(addresses)).sorted()
     return unique.isEmpty ? "未发现" : unique.joined(separator: "、")
 }
 
-enum CheckLevel {
+enum CheckLevel: Equatable {
     case good, attention, pending
 }
 
@@ -146,7 +164,7 @@ func validDNSServer(_ text: String) -> Bool {
 // Read DNS from the selected Wi-Fi service, rather than the system-wide VPN resolver.
 func wifiDNSServers(_ device: String) -> [String] {
     guard !device.isEmpty,
-          let store = SCDynamicStoreCreate(nil, "网络共享器" as CFString, nil, nil),
+          let store = SCDynamicStoreCreate(nil, "局域网隧道共享器" as CFString, nil, nil),
           let keys = SCDynamicStoreCopyKeyList(store, "State:/Network/Service/.*/IPv4" as CFString) as? [String] else { return [] }
     var servers: [String] = []
     for key in keys.sorted() {
@@ -281,7 +299,7 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
     @Published var sourceDevice = ""
     @Published var selectedDevices: Set<String> = []
     @Published var sharingState = "idle"
-    @Published var sharingMessage = "请选择用于连接设备的端口。"
+    @Published var sharingMessage = "请选择用于连接设备的端口，或启用局域网隧道。"
     @Published var runningBridge = ""
     @Published var routeMode = "direct"
     @Published var proxyPort = "1082"
@@ -290,6 +308,27 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
     @Published var useAuthentication = false
     @Published var proxyUsername = ""
     @Published var proxyPassword = ""
+    // LAN proxy: lets a phone on the same Wi-Fi use this Mac's authenticated
+    // connection through a SOCKS5 listener bound to the Wi-Fi address only.
+    @Published var lanProxyEnabled = false
+    @Published var lanProxyPort = "1080"
+    var lanPortNumber: Int? { Int(lanProxyPort).flatMap { (1...65535).contains($0) ? $0 : nil } }
+    var lanPortText: String { lanPortNumber.map(String.init) ?? lanProxyPort }
+    func normalizeLanPort() {
+        guard let port = lanPortNumber else { return }
+        let canonical = String(port)
+        if lanProxyPort != canonical { lanProxyPort = canonical }
+    }
+    @Published var lanProxyUsername = LANCredentials.initial.username
+    @Published var lanProxyPassword = ""
+    @Published var lanProxyAddress = ""
+    @Published var lanProxyReady = false
+    @Published var credentialNotice = "启动成功后自动保存账号"
+    @Published var credentialWarning = false
+    private let credentialStore: LANCredentialStore
+    private(set) var pendingLANCredentials: LANCredentials?
+    private var savedLANCredentials: LANCredentials?
+    private let observesSystem: Bool
     @Published var wifiAddress = "未连接"
     @Published var wifiNetwork = "未连接"
     @Published var sharedAddress = "未运行"
@@ -303,6 +342,17 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
     @Published var proxyDetail = "正在检查"
     @Published var dnsLevel: CheckLevel = .pending
     @Published var dnsDetail = "等待网络"
+    @Published var dnsPrimaryLevel: CheckLevel = .pending
+    @Published var dnsSecondaryLevel: CheckLevel = .pending
+    @Published var dnsActiveAddress = ""
+    var dnsSummary: String {
+        if !dnsActiveAddress.isEmpty { return dnsActiveAddress }
+        switch dnsLevel {
+        case .good: return "启动时验证"
+        case .attention: return dnsServer.isEmpty ? "待设置" : "未响应"
+        case .pending: return "正在检查"
+        }
+    }
     private var runtimePath: String?
     private var heartbeat: Timer?
     private var startTime: Date?
@@ -317,7 +367,22 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
     private var infoTick = 0
     private var selectedPortAssignments: [String: String] = [:]
 
-    init() {
+    init(credentialStore: LANCredentialStore = PreferencesLANCredentialStore(), observesSystem: Bool = true) {
+        self.credentialStore = credentialStore
+        self.observesSystem = observesSystem
+        do {
+            if let saved = try credentialStore.load() {
+                lanProxyUsername = saved.username
+                lanProxyPassword = saved.secret
+                savedLANCredentials = saved
+                credentialNotice = "账号已记住"
+            }
+        } catch {
+            credentialNotice = "无法读取本地设置，请重新输入账号"
+            credentialWarning = true
+        }
+        // Synthetic UI/state tests must not discover interfaces or launch probes.
+        guard observesSystem else { return }
         signal(SIGPIPE, SIG_IGN)
         refreshAdapters()
         infoTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
@@ -332,11 +397,42 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
             }
         }
         refreshNetworkInfo()
-        refreshProxyCheck()
+        refreshProxyCheck(showPending: true)
+    }
+
+    var lanCredentials: LANCredentials {
+        LANCredentials(username: lanProxyUsername, secret: lanProxyPassword)
+    }
+    var lanIssue: String? {
+        lanConfigurationIssue(port: lanProxyPort, credentials: lanCredentials,
+                              upstreamPort: routeMode == "socks5" ? proxyPort : nil)
+    }
+    var lanProxyValid: Bool { lanIssue == nil }
+    var lanCheck: ConnectionCheck {
+        lanConnectionCheck(state: sharingState, ready: lanProxyReady, address: wifiAddress,
+                           port: lanPortText, configurationIssue: lanIssue)
+    }
+    var startHint: String? {
+        if isBusy { return nil }
+        if otherSharing { return "另一个共享会话正在运行，请先关闭它" }
+        if sourceDevice.isEmpty { return "请先连接 Wi-Fi" }
+        if selectedDevices.isEmpty && !lanProxyEnabled { return "启用局域网隧道，或选择物理共享端口" }
+        if lanProxyEnabled, let issue = lanIssue { return issue }
+        if !validDNSServer(dnsServer) || (!dnsSecondary.isEmpty && !validDNSServer(dnsSecondary)) {
+            return "请在上游连接中填写有效的 DNS 地址"
+        }
+        if routeMode == "socks5" {
+            if !(Int(proxyPort).map { (1...65535).contains($0) } ?? false) { return "请填写有效的上游代理端口" }
+            if useAuthentication && (!(1...255).contains(proxyUsername.utf8.count) || !(1...255).contains(proxyPassword.utf8.count)) {
+                return "请填写上游代理账号"
+            }
+        }
+        return nil
     }
 
     var canStart: Bool {
-        !otherSharing && !sourceDevice.isEmpty && !selectedDevices.isEmpty && !selectedDevices.contains(sourceDevice) && validDNSServer(dnsServer) &&
+        !otherSharing && !sourceDevice.isEmpty && (!selectedDevices.isEmpty || lanProxyEnabled) && !selectedDevices.contains(sourceDevice) && validDNSServer(dnsServer) &&
+        (!lanProxyEnabled || lanProxyValid) &&
         (dnsSecondary.isEmpty || validDNSServer(dnsSecondary)) &&
         (routeMode == "direct" || (Int(proxyPort).map { (1...65535).contains($0) } ?? false)) &&
         (!useAuthentication || routeMode == "direct" ||
@@ -355,7 +451,8 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         let connected = selected.filter(\.connected).count
         let ports: ConnectionCheck
         if selectedDevices.isEmpty {
-            ports = ConnectionCheck(name: "共享端口", detail: "请选择连接设备的端口", level: .pending)
+            ports = ConnectionCheck(name: "共享端口", detail: lanProxyEnabled ? "未选择端口，仅启用局域网隧道" : "请选择连接设备的端口",
+                                    level: lanProxyEnabled ? .good : .pending)
         } else if selected.count < selectedDevices.count || connected < selectedDevices.count {
             ports = ConnectionCheck(name: "共享端口", detail: "已选择 \(selectedDevices.count) 个，\(connected) 个已连接", level: .attention)
         } else {
@@ -364,17 +461,19 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         let subnet = ConnectionCheck(name: "共享网段", detail: subnetDetail, level: subnetLevel)
         let resources = Bundle.main.resourceURL!
         let binaries = Bundle.main.bundleURL.appendingPathComponent("Contents/MacOS")
-        let required = [resources.appendingPathComponent("engine.sh"), resources.appendingPathComponent("private_runtime.dylib"),
-                        resources.appendingPathComponent("network.desktop.xml"), binaries.appendingPathComponent("prl_naptd"),
-                        binaries.appendingPathComponent("mock_dispatcher"), binaries.appendingPathComponent("socks_gateway"),
-                        binaries.appendingPathComponent("mobile_identity"), binaries.appendingPathComponent("session_supervisor"),
-                        binaries.appendingPathComponent("subnet_guard"), binaries.appendingPathComponent("lease_store"),
-                        resources.appendingPathComponent("reconnect_helpers.sh")]
+        let required = [resources.appendingPathComponent("engine.sh"), resources.appendingPathComponent("reconnect_helpers.sh"),
+                        binaries.appendingPathComponent("standalone_bridge"), binaries.appendingPathComponent("libslirp.0.dylib"),
+                        binaries.appendingPathComponent("libglib-2.0.0.dylib"), binaries.appendingPathComponent("libpcre2-8.0.dylib"),
+                        binaries.appendingPathComponent("libintl.8.dylib"), binaries.appendingPathComponent("libiconv.2.dylib"),
+                        binaries.appendingPathComponent("socks_gateway"), binaries.appendingPathComponent("mobile_identity"),
+                        binaries.appendingPathComponent("session_supervisor"), binaries.appendingPathComponent("subnet_guard"),
+                        binaries.appendingPathComponent("lease_store") ]
         let ready = required.allSatisfy { FileManager.default.fileExists(atPath: $0.path) }
         let engine = ConnectionCheck(name: "共享组件", detail: ready ? ((sharingState == "running" || sharingState == "waiting") ? "正在运行" : "组件齐全") : "应用组件缺失", level: ready ? .good : .attention)
         let dns = ConnectionCheck(name: "DNS 设置", detail: dnsDetail, level: dnsLevel)
         var items = [wifi, ports, subnet, dns, engine]
         if routeMode == "socks5" { items.append(ConnectionCheck(name: "SOCKS5 代理", detail: proxyDetail, level: proxyLevel)) }
+        if lanProxyEnabled { items.append(lanCheck) }
         return items
     }
 
@@ -469,7 +568,7 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         refreshDNSCheck()
     }
 
-    func refreshProxyCheck() {
+    func refreshProxyCheck(showPending: Bool = false) {
         proxyProbeGeneration += 1
         let generation = proxyProbeGeneration
         guard routeMode == "socks5" else { proxyLevel = .pending; proxyDetail = "直连模式"; return }
@@ -477,7 +576,8 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
             proxyLevel = .attention; proxyDetail = "端口应为 1–65535"; return
         }
         let requiresAuthentication = useAuthentication
-        proxyLevel = .pending; proxyDetail = "正在检查本机代理"
+        // The periodic timer must not blank a known result for a moment.
+        if showPending { proxyLevel = .pending; proxyDetail = "正在检查本机代理" }
         DispatchQueue.global(qos: .utility).async {
             let (level, detail) = checkSOCKSMethod(port: port, requiresAuthentication: requiresAuthentication)
             DispatchQueue.main.async {
@@ -491,20 +591,28 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         dnsProbeGeneration += 1
         let generation = dnsProbeGeneration
         guard validDNSServer(dnsServer), dnsSecondary.isEmpty || validDNSServer(dnsSecondary) else {
-            dnsLevel = .attention; dnsDetail = "请填写有效的首选 DNS，备用 DNS 可留空"; return
+            dnsLevel = .attention; dnsDetail = "请填写有效的首选 DNS，备用 DNS 可留空"
+            dnsPrimaryLevel = .attention; dnsSecondaryLevel = dnsSecondary.isEmpty ? .pending : .attention
+            dnsActiveAddress = ""; return
         }
-        guard !sourceDevice.isEmpty else { dnsLevel = .pending; dnsDetail = "等待已连接的 Wi-Fi"; return }
+        guard !sourceDevice.isEmpty else {
+            dnsLevel = .pending; dnsDetail = "等待已连接的 Wi-Fi"
+            dnsPrimaryLevel = .pending; dnsSecondaryLevel = .pending; dnsActiveAddress = ""; return
+        }
         if routeMode == "socks5" && useAuthentication {
-            dnsLevel = .good; dnsDetail = "地址格式有效；认证代理启动时验证"; return
+            dnsLevel = .good; dnsDetail = "地址格式有效；认证代理启动时验证"
+            dnsPrimaryLevel = .pending; dnsSecondaryLevel = dnsSecondary.isEmpty ? .pending : .pending
+            dnsActiveAddress = ""; return
         }
         let selectedProxy: Int?
         if routeMode == "socks5" {
             guard let port = Int(proxyPort), (1...65535).contains(port) else {
-                dnsLevel = .attention; dnsDetail = "请先设置有效的代理端口"; return
+                dnsLevel = .attention; dnsDetail = "请先设置有效的代理端口"
+                dnsPrimaryLevel = .attention; dnsSecondaryLevel = .attention; dnsActiveAddress = ""; return
             }
             selectedProxy = port
         } else { selectedProxy = nil }
-        if showChecking { dnsLevel = .pending; dnsDetail = "正在检查 DNS" }
+        if showChecking { dnsLevel = .pending; dnsDetail = "正在检查 DNS"; dnsActiveAddress = "" }
         let dns = dnsServer
         let backup = dnsSecondary
         let source = sourceDevice
@@ -515,8 +623,10 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
                 let primaryResult = checkDNSResponse(server: dns, source: source, proxyPort: selectedProxy, gatewayPath: gatewayPath)
                 var level = primaryResult.0
                 var detail = primaryResult.1
+                var secondaryLevel: CheckLevel = .pending
                 if !backup.isEmpty && backup != dns {
                     let backupResult = checkDNSResponse(server: backup, source: source, proxyPort: selectedProxy, gatewayPath: gatewayPath)
+                    secondaryLevel = backupResult.0
                     switch (primaryResult.0, backupResult.0) {
                     case (.good, .good): level = .good; detail = "首选和备用 DNS 均已响应"
                     case (.good, _): level = .attention; detail = "首选 DNS 已响应，备用未响应"
@@ -524,9 +634,14 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
                     default: level = .attention; detail = "首选和备用 DNS 均未响应"
                     }
                 }
+                let active = activeDNSAddress(primary: primaryResult.0, secondary: secondaryLevel,
+                                              primaryAddress: dns, secondaryAddress: backup)
                 DispatchQueue.main.async {
                     guard self.dnsProbeGeneration == generation else { return }
                     self.dnsLevel = level; self.dnsDetail = detail
+                    self.dnsPrimaryLevel = primaryResult.0
+                    self.dnsSecondaryLevel = backup.isEmpty || backup == dns ? .pending : secondaryLevel
+                    self.dnsActiveAddress = active
                 }
             }
         }
@@ -537,10 +652,11 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         infoRefreshInFlight = true
         let source = sourceDevice
         let ownPath = runtimePath
+        let usesPhysicalPorts = !selectedDevices.isEmpty
         DispatchQueue.global(qos: .utility).async {
             let wifi = ipv4Details(source)
             let dirs = (try? FileManager.default.contentsOfDirectory(atPath: "/private/tmp")) ?? []
-            let candidates = dirs.filter { $0.hasPrefix("networksharer.") || $0.hasPrefix("naptd-hotspot.") }.map { "/private/tmp/" + $0 }
+            let candidates = dirs.filter { $0.hasPrefix("lanproxy.") }.map { "/private/tmp/" + $0 }
             let running = candidates.compactMap { path -> (String, [String: String])? in
                 let state = stateValues(path)
                 guard sessionPossiblyActive(state, statePath: path + "/state") else { return nil }
@@ -557,17 +673,19 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
             let routes = runCommand("/usr/sbin/netstat", ["-rn", "-f", "inet"])
             let hasAddressConflict = interfaces.status == 1
             let hasRouteConflict = routes.output.components(separatedBy: .newlines).contains {
-                $0.split(whereSeparator: { $0.isWhitespace }).first?.hasPrefix("172.30.77") == true
+                $0.split(whereSeparator: { $0.isWhitespace }).first?.hasPrefix("172.30.79") == true
             }
             let subnet: (CheckLevel, String)
-            if active?.0 == ownPath && (active?.1["state"] == "running" || active?.1["state"] == "waiting") {
-                subnet = (.good, "172.30.77.0/24 正由本应用使用")
+            if !usesPhysicalPorts {
+                subnet = (.pending, "仅隧道模式，不使用共享网段")
+            } else if active?.0 == ownPath && !bridge.isEmpty && (active?.1["state"] == "running" || active?.1["state"] == "waiting") {
+                subnet = (.good, "172.30.79.0/24 正由本应用使用")
             } else if other || hasAddressConflict || hasRouteConflict {
-                subnet = (.attention, "172.30.77.0/24 已被占用")
+                subnet = (.attention, "172.30.79.0/24 已被占用")
             } else if interfaces.status != 0 || routes.status != 0 || !routes.output.contains("Destination") {
                 subnet = (.pending, "启动时会检查网段是否冲突")
             } else {
-                subnet = (.good, "172.30.77.0/24 未发现冲突")
+                subnet = (.good, "172.30.79.0/24 未发现冲突")
             }
             DispatchQueue.main.async {
                 self.infoRefreshInFlight = false
@@ -576,9 +694,12 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
                 }
                 self.wifiAddress = wifi?.address ?? "未连接"
                 self.wifiNetwork = wifi?.network ?? "未连接"
-                self.sharedAddress = shared?.address ?? (active == nil ? "未运行" : "正在获取")
-                self.sharedNetwork = shared?.network ?? (active == nil ? "未运行" : "正在获取")
-                self.clientAddresses = clients
+                self.sharedAddress = usesPhysicalPorts ? (shared?.address ?? (active == nil ? "未运行" : "正在获取")) : "不使用"
+                self.sharedNetwork = usesPhysicalPorts ? (shared?.network ?? (active == nil ? "未运行" : "正在获取")) : "不使用"
+                self.clientAddresses = usesPhysicalPorts ? clients : "不使用"
+                if self.lanProxyReady {
+                    self.lanProxyAddress = wifi.map { $0.address + ":" + self.lanPortText } ?? ""
+                }
                 self.otherSharing = other
                 self.subnetLevel = subnet.0
                 self.subnetDetail = subnet.1
@@ -586,10 +707,17 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         }
     }
 
+    func prepareSharingState() {
+        sharingState = "starting"
+        lanProxyReady = false
+        pendingLANCredentials = lanProxyEnabled ? lanCredentials : nil
+        normalizeLanPort()
+        sharingMessage = "等待管理员授权…"
+    }
+
     func startSharing() {
         guard canStart else { return }
-        sharingState = "starting"
-        sharingMessage = "等待管理员授权并检查共享端口…"
+        prepareSharingState()
         let selectedMode = routeMode
         let port = selectedMode == "socks5" ? String(Int(proxyPort) ?? 0) : "0"
         let user = selectedMode == "socks5" && useAuthentication ? Array(proxyUsername.utf8) : []
@@ -602,14 +730,18 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         }
         let arguments = [engineScript, "launch", String(getuid()), String(getpid()), sourceDevice, selectedMode, port, dnsServer,
                          dnsSecondary.isEmpty ? "-" : dnsSecondary] + specs
-        let command = "/bin/bash " + arguments.map(shellQuote).joined(separator: " ")
+        let lanPort = lanProxyEnabled ? (lanPortNumber ?? 0) : 0
+        let lanAuth = lanProxyEnabled ? [UInt8(lanProxyUsername.utf8.count)] + Array(lanProxyUsername.utf8)
+                                     + [UInt8(lanProxyPassword.utf8.count)] + Array(lanProxyPassword.utf8) : []
+        let command = (lanPort != 0 ? "NAPTD_LAN_PROXY_PORT=" + String(lanPort) + " " : "")
+            + "/bin/bash " + arguments.map(shellQuote).joined(separator: " ")
         let script = "do shell script " + appleScriptQuote(command) + " with administrator privileges"
         DispatchQueue.global(qos: .userInitiated).async {
             let result = runCommand("/usr/bin/osascript", ["-e", script])
             let path = result.output.trimmingCharacters(in: .whitespacesAndNewlines)
             DispatchQueue.main.async {
-                guard result.status == 0, path.hasPrefix("/private/tmp/networksharer."),
-                      !path.dropFirst("/private/tmp/networksharer.".count).contains("/") else {
+                guard result.status == 0, path.hasPrefix("/private/tmp/lanproxy."),
+                      !path.dropFirst("/private/tmp/lanproxy.".count).contains("/") else {
                     self.sharingState = "error"
                     self.sharingMessage = result.error.isEmpty ? "启动未完成。" : String(result.error.prefix(220))
                     return
@@ -621,7 +753,14 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
                     self.sharingState = "error"; self.sharingMessage = "无法安全写入连接配置。"
                     self.runtimePath = nil; return
                 }
+                if !lanAuth.isEmpty, !self.writeLANConfiguration(lanAuth) {
+                    _ = self.sendControl("STOP")
+                    self.sharingState = "error"; self.sharingMessage = "无法安全写入局域网隧道配置。"
+                    self.runtimePath = nil; return
+                }
                 self.proxyPassword = ""
+                // Keep LAN credentials in memory, masked by SecureField. Persist
+                // only after the controller confirms a successful start.
                 _ = self.sendControl("READY")
                 self.startHeartbeat()
             }
@@ -631,6 +770,18 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
     private func writeConfiguration(_ bytes: [UInt8]) -> Bool {
         guard let runtimePath else { return false }
         let path = runtimePath + "/auth"
+        let fd = path.withCString { Darwin.open($0, O_WRONLY | O_TRUNC | O_CLOEXEC | O_NOFOLLOW) }
+        guard fd >= 0 else { return false }
+        defer { Darwin.close(fd) }
+        return bytes.withUnsafeBytes { raw in
+            guard let base = raw.baseAddress else { return false }
+            return Darwin.write(fd, base, raw.count) == raw.count
+        }
+    }
+
+    private func writeLANConfiguration(_ bytes: [UInt8]) -> Bool {
+        guard let runtimePath else { return false }
+        let path = runtimePath + "/lan-auth"
         let fd = path.withCString { Darwin.open($0, O_WRONLY | O_TRUNC | O_CLOEXEC | O_NOFOLLOW) }
         guard fd >= 0 else { return false }
         defer { Darwin.close(fd) }
@@ -679,12 +830,7 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
                 selectedPortAssignments[pair[0]] = pair[1]
             }
         }
-        if let state = values["state"] {
-            if sharingState != "stopping" || state == "stopped" || state == "error" { sharingState = state }
-            if let message = values["message"], sharingState != "stopping" { sharingMessage = message }
-            runningBridge = values["bridge"] ?? ""
-            if state == "stopped" || state == "error" { stopHeartbeat() }
-        }
+        applySessionState(values)
         refreshNetworkInfo()
         if sharingState == "starting", let startTime, Date().timeIntervalSince(startTime) > 35 {
             _ = sendControl("STOP")
@@ -692,10 +838,45 @@ func checkDNSResponse(server: String, source: String, proxyPort: Int?, gatewayPa
         }
     }
 
+    // Kept separate from file polling so state transitions can be tested without
+    // starting a privileged sharing session.
+    func applySessionState(_ values: [String: String]) {
+        if let state = values["state"] {
+            if sharingState != "stopping" || state == "stopped" || state == "error" { sharingState = state }
+            if let message = values["message"], sharingState != "stopping" { sharingMessage = message }
+            runningBridge = values["bridge"] ?? ""
+        }
+        let serving = sharingState == "running" || sharingState == "waiting"
+        let reportedPort = values["lan_port"].flatMap(Int.init) ?? 0
+        lanProxyReady = serving && values["lan_ready"] == "1" && reportedPort > 0
+        lanProxyAddress = lanProxyReady && wifiAddress != "未连接" ? wifiAddress + ":" + String(reportedPort) : ""
+        if lanProxyReady, let credentials = pendingLANCredentials {
+            rememberLANCredentials(credentials)
+            pendingLANCredentials = nil
+        }
+        if sharingState == "stopped" || sharingState == "error" { stopHeartbeat() }
+    }
+
+    func rememberLANCredentials(_ credentials: LANCredentials) {
+        guard credentials != savedLANCredentials else { return }
+        do {
+            try credentialStore.save(credentials)
+            savedLANCredentials = credentials
+            credentialNotice = "账号已记住"
+            credentialWarning = false
+        } catch {
+            credentialNotice = "未能保存账号，下次打开需重新输入"
+            credentialWarning = true
+        }
+    }
+
     private func stopHeartbeat() {
         heartbeat?.invalidate(); heartbeat = nil
         runtimePath = nil; startTime = nil
-        loadWiFiDNSIfNeeded(force: true)
+        lanProxyReady = false
+        lanProxyAddress = ""
+        pendingLANCredentials = nil
+        if observesSystem { loadWiFiDNSIfNeeded(force: true) }
     }
 
     func stopSharing() {
@@ -716,18 +897,6 @@ struct StatusDot: View {
     var body: some View { Circle().fill(color).frame(width: 8, height: 8) }
 }
 
-struct Card<Content: View>: View {
-    @ViewBuilder var content: Content
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) { content }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(22)
-            .background(Color(nsColor: .controlBackgroundColor))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.primary.opacity(0.08)))
-    }
-}
-
 struct AddressRow: View {
     let title: String
     let value: String
@@ -740,211 +909,37 @@ struct AddressRow: View {
     }
 }
 
-struct ConnectionCheckRow: View {
-    let check: ConnectionCheck
+struct LevelRing: View {
+    let level: CheckLevel
     var color: Color {
-        switch check.level {
+        switch level {
         case .good: return .green
         case .attention: return .orange
         case .pending: return .secondary
         }
     }
     var symbol: String {
-        switch check.level {
+        switch level {
         case .good: return "checkmark.circle.fill"
         case .attention: return "exclamationmark.circle.fill"
         case .pending: return "circle.dashed"
         }
     }
     var body: some View {
+        Image(systemName: symbol).foregroundStyle(color).frame(width: 16)
+            .accessibilityHidden(true)
+    }
+}
+
+struct ConnectionCheckRow: View {
+    let check: ConnectionCheck
+    var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 9) {
-            Image(systemName: symbol).foregroundStyle(color).frame(width: 16)
+            LevelRing(level: check.level)
             Text(check.name).font(.system(size: 12, weight: .medium))
             Spacer(minLength: 20)
             Text(check.detail).font(.system(size: 12)).foregroundStyle(.secondary).multilineTextAlignment(.trailing)
         }.padding(.vertical, 3)
-    }
-}
-
-struct ContentView: View {
-    @ObservedObject var model: HotspotModel
-    var stateLabel: String {
-        switch model.sharingState {
-        case "running": return "共享端口已接入"
-        case "waiting": return "等待设备重新连接"
-        case "starting": return "正在启动"
-        case "stopping": return "正在停止"
-        case "error": return "需要处理"
-        default: return "已关闭"
-        }
-    }
-    var stateColor: Color {
-        switch model.sharingState {
-        case "running": return .green
-        case "starting", "waiting", "stopping": return .orange
-        case "error": return .red
-        default: return .secondary
-        }
-    }
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 15) {
-                HStack(spacing: 14) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 12).fill(Color.accentColor.gradient).frame(width: 44, height: 44)
-                        Image(systemName: "network").font(.system(size: 21, weight: .semibold)).foregroundStyle(.white)
-                    }
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack(spacing: 7) {
-                            Text("互联网共享").font(.system(size: 18, weight: .semibold))
-                            StatusDot(color: stateColor)
-                            Text(stateLabel).font(.system(size: 12)).foregroundStyle(.secondary)
-                        }
-                        Text("将 Mac 的网络共享给其他设备").font(.system(size: 12)).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Toggle("互联网共享", isOn: Binding(
-                        get: { model.isBusy },
-                        set: { enabled in enabled ? model.startSharing() : model.stopSharing() }
-                    ))
-                    .labelsHidden().toggleStyle(.switch)
-                    .disabled(model.sharingState == "starting" || model.sharingState == "stopping" || (!model.isBusy && !model.canStart))
-                }
-                .padding(16).background(Color(nsColor: .controlBackgroundColor)).clipShape(RoundedRectangle(cornerRadius: 14))
-
-                HStack {
-                    Text("共享以下来源的连接").font(.system(size: 14, weight: .semibold))
-                    Spacer()
-                    Picker("上游网络", selection: $model.sourceDevice) {
-                        if model.wifiSources.isEmpty { Text("未检测到已连接的 Wi-Fi").tag("") }
-                        ForEach(model.wifiSources) { adapter in Text("Wi-Fi  ·  \(adapter.device)").tag(adapter.device) }
-                    }.labelsHidden().frame(maxWidth: 250).disabled(model.isBusy || model.wifiSources.isEmpty)
-                        .onChange(of: model.sourceDevice) { model.refreshNetworkInfo(); model.loadWiFiDNSIfNeeded(); model.refreshDNSCheck() }
-                }
-                .padding(16).background(Color(nsColor: .controlBackgroundColor)).clipShape(RoundedRectangle(cornerRadius: 14))
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("连接方式").font(.system(size: 14, weight: .semibold))
-                    Picker("连接方式", selection: $model.routeMode) {
-                        Text("Wi-Fi 直连").tag("direct")
-                        Text("SOCKS5 代理").tag("socks5")
-                    }.pickerStyle(.segmented).disabled(model.isBusy)
-                        .onChange(of: model.routeMode) { model.refreshProxyCheck(); model.refreshDNSCheck() }
-                    if model.routeMode == "direct" {
-                        Text("共享流量绑定所选 Wi-Fi 出口，绕过系统 VPN 和系统代理；连接失败时不会回退。网络本身仍可能进行透明转发。")
-                            .font(.system(size: 12)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                    } else {
-                        HStack {
-                            Text("代理地址").font(.system(size: 12)).foregroundStyle(.secondary)
-                            Text("127.0.0.1 :").font(.system(size: 13, design: .monospaced))
-                            TextField("1082", text: $model.proxyPort).frame(width: 80).disabled(model.isBusy)
-                                .onChange(of: model.proxyPort) { model.refreshProxyCheck(); model.refreshDNSCheck() }
-                            Toggle("需要认证", isOn: $model.useAuthentication).disabled(model.isBusy)
-                                .onChange(of: model.useAuthentication) { model.refreshProxyCheck(); model.refreshDNSCheck() }
-                            Spacer()
-                        }
-                        if model.useAuthentication {
-                            HStack {
-                                TextField("用户名", text: $model.proxyUsername)
-                                SecureField("密码", text: $model.proxyPassword)
-                            }.disabled(model.isBusy)
-                            Text("用户名与密码各限 1–255 个 UTF-8 字节；密码启动后清空，不保存。")
-                                .font(.system(size: 11)).foregroundStyle(.secondary)
-                        }
-                        Text("TCP 和 DNS 经过指定的 SOCKS5 端口；其他 UDP 暂不支持并会阻断。代理软件自身的分流规则仍然生效。")
-                            .font(.system(size: 12)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                    }
-                    Divider()
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("DNS 服务器").font(.system(size: 12)).foregroundStyle(.secondary)
-                            Text("默认使用当前 Wi-Fi，可手动修改").font(.system(size: 11)).foregroundStyle(.secondary)
-                        }
-                        HStack {
-                            TextField("首选 IPv4", text: Binding(get: { model.dnsServer }, set: { model.setDNS($0, secondary: false) }))
-                            TextField("备用 IPv4（可留空）", text: Binding(get: { model.dnsSecondary }, set: { model.setDNS($0, secondary: true) }))
-                        }.disabled(model.isBusy)
-                    }
-                }
-                .padding(16).background(Color(nsColor: .controlBackgroundColor)).clipShape(RoundedRectangle(cornerRadius: 14))
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("网络地址").font(.system(size: 14, weight: .semibold))
-                    AddressRow(title: "本机 Wi-Fi IPv4", value: model.wifiAddress)
-                    AddressRow(title: "本机 Wi-Fi 网段", value: model.wifiNetwork)
-                    Divider()
-                    AddressRow(title: "共享网段", value: model.sharedNetwork)
-                    AddressRow(title: "Mac 共享接口 IPv4", value: model.sharedAddress)
-                    AddressRow(title: "共享网关 / DNS", value: model.sharedNetwork == "172.30.77.0/24" ? "172.30.77.1" : "未运行")
-                    AddressRow(title: "已发现设备 IPv4", value: model.clientAddresses)
-                    Text("设备地址根据网络邻居记录显示，可能有延迟。")
-                        .font(.system(size: 11)).foregroundStyle(.secondary)
-                }
-                .padding(16).background(Color(nsColor: .controlBackgroundColor)).clipShape(RoundedRectangle(cornerRadius: 14))
-
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack {
-                        Text("使用以下端口共享给设备").font(.system(size: 14, weight: .semibold))
-                        Spacer()
-                    }.padding(.horizontal, 16).padding(.vertical, 13)
-                    Divider()
-                    if model.outputPorts.isEmpty {
-                        Text("没有可用端口，请连接设备；列表会自动更新。")
-                            .font(.system(size: 13)).foregroundStyle(.secondary).padding(16)
-                    }
-                    ForEach(model.outputPorts) { adapter in
-                        HStack(spacing: 12) {
-                            Image(systemName: adapter.mobile ? "iphone" : "cable.connector")
-                                .foregroundStyle(.secondary).frame(width: 20)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(adapter.displayTitle).font(.system(size: 13, weight: .medium))
-                                Text(!adapter.bridgeable ? "系统网桥暂不支持" : (adapter.connected ? "已连接" : "未检测到连接"))
-                                    .font(.system(size: 11)).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            Toggle(adapter.name + " " + adapter.device, isOn: Binding(
-                                get: { model.selectedDevices.contains(adapter.device) },
-                                set: { enabled in
-                                    if enabled { model.selectedDevices.insert(adapter.device) }
-                                    else { model.selectedDevices.remove(adapter.device) }
-                                }
-                            ))
-                            .labelsHidden().toggleStyle(.switch).controlSize(.small)
-                            .disabled(model.isBusy || !adapter.bridgeable)
-                        }
-                        .padding(.horizontal, 16).padding(.vertical, 9)
-                        if adapter.id != model.outputPorts.last?.id { Divider().padding(.leading, 48) }
-                    }
-                }
-                .background(Color(nsColor: .controlBackgroundColor)).clipShape(RoundedRectangle(cornerRadius: 14))
-
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: "info.circle").foregroundStyle(.secondary)
-                    Text("支持 IPv4 设备；DNS 使用上面指定的服务器，并按所选连接方式转发。")
-                        .font(.system(size: 12)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                }
-                if model.otherSharing {
-                    Text("检测到已有共享正在运行。请先在旧版应用中关闭共享，再启动本版本。")
-                        .font(.system(size: 12, weight: .medium)).foregroundStyle(.orange)
-                }
-                Text(model.sharingMessage).font(.system(size: 12)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-
-                DisclosureGroup("本地连接检查", isExpanded: $model.showChecks) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        ForEach(model.connectionChecks) { check in
-                            ConnectionCheckRow(check: check)
-                        }
-                        Text("自动检查本机配置；不代表所有网站或节点均可连接。")
-                            .font(.system(size: 11)).foregroundStyle(.secondary).padding(.top, 5)
-                    }.padding(.top, 10)
-                }
-                .font(.system(size: 13, weight: .medium)).padding(14)
-                .background(Color(nsColor: .controlBackgroundColor)).clipShape(RoundedRectangle(cornerRadius: 14))
-            }
-            .padding(24)
-        }
-        .frame(minWidth: 700, minHeight: 620)
-        .background(Color(nsColor: .windowBackgroundColor))
     }
 }
 

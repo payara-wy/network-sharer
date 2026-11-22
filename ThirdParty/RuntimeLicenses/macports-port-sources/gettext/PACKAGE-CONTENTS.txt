@@ -1,0 +1,191 @@
+@name gettext-runtime-1.0_0
+@portname gettext-runtime
+@portepoch 0
+@portversion 1.0
+@portrevision 0
+@archs arm64
+@pkgdep libiconv-1.18_0
+@macports_version 2.12.2
+@os.subplatform macosx
+@os.version 23.6.0
+@macos_version 14.8.4
+@xcodecltversion 15.3.0.0.1.1708487402
+@ports_commit 745ff1b58358f448da09339ba9c3ea3a464e773e
+@source_date_epoch 1772876445
+opt/local/bin/envsubst
+@comment MD5:91f74ca83f75b9be0e1d25b0447b5848
+@comment binary:1
+opt/local/bin/gettext
+@comment MD5:7da407e1df3319597e2dad2811b9b31c
+@comment binary:1
+opt/local/bin/gettext.sh
+@comment MD5:09652e3b76939c3816aca51f0062a65a
+@comment binary:0
+opt/local/bin/ngettext
+@comment MD5:5375c28ddc417aaf7f4e3b2b99943911
+@comment binary:1
+opt/local/bin/printf_gettext
+@comment MD5:5056f444ce9ce089b05b924af37dc2c0
+@comment binary:1
+opt/local/bin/printf_ngettext
+@comment MD5:9a8313a2442c5b2443d702aa2bc17a8e
+@comment binary:1
+opt/local/include/libintl.h
+@comment MD5:05ce44ef26d0d23e106d7479c88d5915
+@comment binary:0
+opt/local/lib/libintl.8.dylib
+@comment MD5:0bb1bd944a39034d997d00ce79a4d70a
+@comment binary:1
+opt/local/lib/libintl.a
+@comment MD5:82f1f864730363563c6b86639353b369
+@comment binary:0
+opt/local/lib/libintl.dylib
+@comment MD5:0bb1bd944a39034d997d00ce79a4d70a
+@comment binary:0
+opt/local/share/doc/gettext/bind_textdomain_codeset.3.html
+@comment MD5:2c39e7029de997f42ebdcdb64430b07e
+@comment binary:0
+opt/local/share/doc/gettext/bindtextdomain.3.html
+@comment MD5:7598d5e6c58f2989407f3c791d2e4b3c
+@comment binary:0
+opt/local/share/doc/gettext/csharpdoc/GNU_Gettext.html
+@comment MD5:4ecc32e74f8772927d27d6cf6e79bc1e
+@comment binary:0
+opt/local/share/doc/gettext/csharpdoc/GNU_Gettext_GettextResourceManager.html
+@comment MD5:dcc8661fd458e9953e6e35ebc990f607
+@comment binary:0
+opt/local/share/doc/gettext/csharpdoc/GNU_Gettext_GettextResourceSet.html
+@comment MD5:9c58f61626cf39c0f42df85fe674ee2b
+@comment binary:0
+opt/local/share/doc/gettext/csharpdoc/begin.html
+@comment MD5:83bbd838b83372aa30c969f13dee9d44
+@comment binary:0
+opt/local/share/doc/gettext/csharpdoc/index.html
+@comment MD5:bd4bd6847f9fde9904f29e4bb4696a6e
+@comment binary:0
+opt/local/share/doc/gettext/csharpdoc/namespaces.html
+@comment MD5:a1fb2bc1e7ab1ae558586fb1439e5ecc
+@comment binary:0
+opt/local/share/doc/gettext/envsubst.1.html
+@comment MD5:de7259968fe1dde9cc36c4dee962fb5d
+@comment binary:0
+opt/local/share/doc/gettext/gettext.1.html
+@comment MD5:46846d14158b2ede803d1cdebc073ae7
+@comment binary:0
+opt/local/share/doc/gettext/gettext.3.html
+@comment MD5:2fa7d7ed66b47a62997c770e2a85d718
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/allclasses-frame.html
+@comment MD5:0c9f2beb0b98851f44bf9117b0f36114
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/deprecated-list.html
+@comment MD5:678c3f0f150801c7f8651047403fb250
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/gnu/gettext/GettextResource.html
+@comment MD5:559764c5f067c4d200854aedc47dafb9
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/gnu/gettext/package-frame.html
+@comment MD5:e5cc9851106b6ea922334277c448433f
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/gnu/gettext/package-summary.html
+@comment MD5:ba0b825e8427650c735817a7c60d7280
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/gnu/gettext/package-tree.html
+@comment MD5:9dfc58fceafd3c5ee7ff5fe387681982
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/help-doc.html
+@comment MD5:e8686194da987ff1eff5248cd4546ec6
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/index-all.html
+@comment MD5:7d6febe5a3798f7c4f12e9ce15810d3f
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/index.html
+@comment MD5:65c6b4a7b7bc3d2e06b437bb992d34d0
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/overview-tree.html
+@comment MD5:d4d7b66af970014fc2603adb14bec176
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/package-list
+@comment MD5:cc24a551176eed32712769a8ecac7c77
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/packages.html
+@comment MD5:10bc80180c3a48ada1c86e01f8aa4deb
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/serialized-form.html
+@comment MD5:46e88998fd27289fe4f3695d7337cbcf
+@comment binary:0
+opt/local/share/doc/gettext/javadoc2/stylesheet.css
+@comment MD5:d782e23c2957890f111646b6a33c9a27
+@comment binary:0
+opt/local/share/doc/gettext/ngettext.1.html
+@comment MD5:fe28468ba40bb9085798bd61acfffd59
+@comment binary:0
+opt/local/share/doc/gettext/ngettext.3.html
+@comment MD5:df954aff318f314860aef81819782554
+@comment binary:0
+opt/local/share/doc/gettext/printf_gettext.1.html
+@comment MD5:c2abb708ffa86794173e266087842cfc
+@comment binary:0
+opt/local/share/doc/gettext/printf_ngettext.1.html
+@comment MD5:44b2b4443933715e33c609732f711e1f
+@comment binary:0
+opt/local/share/doc/gettext/textdomain.3.html
+@comment MD5:3f19d5ced37c82f1373e1999a61dc218
+@comment binary:0
+opt/local/share/gettext/ABOUT-NLS
+@comment MD5:b8379015c0e4d1221c386a8fff0fcb9b
+@comment binary:0
+opt/local/share/man/man1/envsubst.1.gz
+@comment MD5:1c2d1aaad9a2788f895dda4f809db15d
+@comment binary:0
+opt/local/share/man/man1/gettext.1.gz
+@comment MD5:76b4bcfb7cdf91939e6bd164ea305a47
+@comment binary:0
+opt/local/share/man/man1/ngettext.1.gz
+@comment MD5:7386d56caf354bd4ef47211b2ca9f4b9
+@comment binary:0
+opt/local/share/man/man1/printf_gettext.1.gz
+@comment MD5:05371470ae2fc46041ead459f43c2baf
+@comment binary:0
+opt/local/share/man/man1/printf_ngettext.1.gz
+@comment MD5:162f212acc3c5a75fdea1ea1cb3e87be
+@comment binary:0
+opt/local/share/man/man3/bind_textdomain_codeset.3.gz
+@comment MD5:29303d09fe319d3df88d3bd4f77b1a9c
+@comment binary:0
+opt/local/share/man/man3/bindtextdomain.3.gz
+@comment MD5:95966d6d297d0e8f7f0737fa4e9e4d66
+@comment binary:0
+opt/local/share/man/man3/dcgettext.3.gz
+@comment MD5:29e35d7a463d736a5ebe2d1648ef9d99
+@comment binary:0
+opt/local/share/man/man3/dcngettext.3.gz
+@comment MD5:9290e33a2fb777550d7ff12d903da16d
+@comment binary:0
+opt/local/share/man/man3/dgettext.3.gz
+@comment MD5:29e35d7a463d736a5ebe2d1648ef9d99
+@comment binary:0
+opt/local/share/man/man3/dngettext.3.gz
+@comment MD5:9290e33a2fb777550d7ff12d903da16d
+@comment binary:0
+opt/local/share/man/man3/gettext.3.gz
+@comment MD5:108d054b1455521f0fcf9eaa6a77f399
+@comment binary:0
+opt/local/share/man/man3/ngettext.3.gz
+@comment MD5:da5f4aa268537d818d8ef8da7810a673
+@comment binary:0
+opt/local/share/man/man3/textdomain.3.gz
+@comment MD5:36d9ac45611561571f84378edbfb4d5e
+@comment binary:0
+@ignore
++COMMENT
+@ignore
++CONTENTS
+@ignore
++DESC
+@ignore
++PORTFILE
+@ignore
++STATE
+@cxx_stdlib none
+@cxx_stdlib_overridden 0

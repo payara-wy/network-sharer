@@ -40,7 +40,7 @@ while kill -0 "$gui" 2>/dev/null; do /bin/sleep .1; done
 /bin/rm -rf "$dir"
 ''')
     def new_session(marked=True, owner_pid=None):
-        d = root/('networksharer.'+uuid.uuid4().hex[:8])
+        d = root/('lanproxy.'+uuid.uuid4().hex[:8])
         d.mkdir(mode=0o711)
         if marked: (d/'session.marker').write_text('NetworkSharerSession/1\n')
         (d/'session.owner').write_text(str(owner_pid if owner_pid is not None else os.getpid())+'\n')
@@ -48,9 +48,9 @@ while kill -0 "$gui" 2>/dev/null; do /bin/sleep .1; done
         return d
     def new_gui():
         return subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'])
-    def launch(directory, gui):
+    def launch(directory, gui, ports=('feth0',)):
         return subprocess.Popen([str(supervisor), str(directory), str(engine), str(os.getuid()), str(gui.pid),
-                                 'en0', 'direct', '0', '1.1.1.1', '-', 'feth0'],
+                                 'en0', 'direct', '0', '1.1.1.1', '-', *ports],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     def status(directory):
         try: return (directory/'supervisor.status').read_text().strip()
@@ -65,7 +65,7 @@ while kill -0 "$gui" 2>/dev/null; do /bin/sleep .1; done
     (dead_controller/'state').write_text('state=running\ndaemon_pid='+str(departed.pid)+'\n')
     unmarked = new_session(marked=False)
     target = root/'unrelated'; target.mkdir()
-    link = root/('networksharer.'+uuid.uuid4().hex[:8]); link.symlink_to(target, target_is_directory=True)
+    link = root/('lanproxy.'+uuid.uuid4().hex[:8]); link.symlink_to(target, target_is_directory=True)
     gui = new_gui(); processes = []
     try:
         first = new_session(); one = launch(first, gui); processes.append(one)
@@ -81,6 +81,16 @@ while kill -0 "$gui" 2>/dev/null; do /bin/sleep .1; done
         assert until(lambda: (first/'state').read_text().startswith('state=error') if (first/'state').exists() else False)
         assert one.wait(timeout=9) == 0
         until(lambda: not first.exists(), seconds=8)
+
+        # A LAN-only proxy session has no downstream port and must still start.
+        lan = new_session(); lan_proc = launch(lan, gui, ports=()); processes.append(lan_proc)
+        assert until(lambda: status(lan)) == 'ready', 'supervisor rejected an empty port list'
+        lan_child = until(lambda: controller(lan))
+        assert alive(lan_child), 'controller did not stay up for a LAN-only session'
+        os.kill(lan_child, signal.SIGTERM)
+        until(lambda: not alive(lan_child), seconds=8)
+        assert until(lambda: not lan.exists(), seconds=8)
+
 
         third = new_session(); three = launch(third, gui); processes.append(three)
         assert until(lambda: status(third)) == 'ready'

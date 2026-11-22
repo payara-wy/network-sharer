@@ -1,0 +1,1534 @@
+@name glib2-2.88.3_1+x11
+@portname glib2
+@portepoch 1
+@portversion 2.88.3
+@portrevision 1
+@archs arm64
+@portvariant +x11
+@pkgdep dbus-1.16.2_0
+@pkgdep gettext-runtime-1.0_0
+@pkgdep libelf-0.8.13_6
+@pkgdep libffi-3.4.8_0
+@pkgdep libiconv-1.19_0
+@pkgdep pcre2-10.47_0
+@pkgdep python314-3.14.7_0
+@pkgdep zlib-1.3.2_0
+@macports_version 2.12.6
+@os.subplatform macosx
+@os.version 23.6.0
+@macos_version 14.8.9
+@xcodecltversion 16.2.0.0.1.1733547573
+@ports_commit 3393469cc03e584134585e5b0d26808eb2104efa
+@source_date_epoch 1787891473
+opt/local/bin/gapplication
+@comment MD5:f36d0cf0a055729939450dc23f1c42e2
+@comment binary:1
+opt/local/bin/gdbus
+@comment MD5:350e1c7d988fd3f491b195150f09ff00
+@comment binary:1
+opt/local/bin/gdbus-codegen
+@comment MD5:56bc92a21b0f19a30ef732712f02ae54
+@comment binary:0
+opt/local/bin/gi-compile-repository
+@comment MD5:1263960fd5dc649318a7b37999270d94
+@comment binary:1
+opt/local/bin/gi-decompile-typelib
+@comment MD5:95ad2dbbe1c009e20d25308b42482a3f
+@comment binary:1
+opt/local/bin/gi-inspect-typelib
+@comment MD5:d3244d7d86c9432854221028b8bd6413
+@comment binary:1
+opt/local/bin/gio
+@comment MD5:daa121c2ec7bfd4344317a72169c863d
+@comment binary:1
+opt/local/bin/gio-querymodules
+@comment MD5:b88a261b3df13d43bd19bded52d8606e
+@comment binary:1
+opt/local/bin/glib-compile-resources
+@comment MD5:b7c77a1ce237704a6c00f87474d0b96f
+@comment binary:1
+opt/local/bin/glib-compile-schemas
+@comment MD5:14f9c37c819a4f8bf1daff97a13e8727
+@comment binary:1
+opt/local/bin/glib-genmarshal
+@comment MD5:57cf69e76095d7121873cda26e8bfb93
+@comment binary:0
+opt/local/bin/glib-gettextize
+@comment MD5:9f449d5704c8356b75c2af6406b324f7
+@comment binary:0
+opt/local/bin/glib-mkenums
+@comment MD5:44d706463a0fb806cf1c99612b27b845
+@comment binary:0
+opt/local/bin/gobject-query
+@comment MD5:804adb594789731d5b87df576900ced3
+@comment binary:1
+opt/local/bin/gresource
+@comment MD5:c5f9dc81dd42ae75dd2dbb72af03156b
+@comment binary:1
+opt/local/bin/gsettings
+@comment MD5:639173788d5db0f4b49abde98867d780
+@comment binary:1
+opt/local/bin/gtester
+@comment MD5:feb2249be3717be2d8c8ed7b7fe6bbfa
+@comment binary:1
+opt/local/bin/gtester-report
+@comment MD5:07bc60a26eda7f08baec9b6df20e0cb1
+@comment binary:0
+opt/local/include/gio-unix-2.0/gio/gdesktopappinfo.h
+@comment MD5:4ae9d013dfb31bd151bb8f4db4dd039e
+@comment binary:0
+opt/local/include/gio-unix-2.0/gio/gfiledescriptorbased.h
+@comment MD5:1395f0eb58804d7f02b596636b229b9b
+@comment binary:0
+opt/local/include/gio-unix-2.0/gio/gunixfdmessage.h
+@comment MD5:0cb4df6a410218c70d2ac1e5ec647bfd
+@comment binary:0
+opt/local/include/gio-unix-2.0/gio/gunixinputstream.h
+@comment MD5:7dad38add0d393201b6722b2c8769a74
+@comment binary:0
+opt/local/include/gio-unix-2.0/gio/gunixmounts.h
+@comment MD5:187725376b2d714b5181918f0bbe05da
+@comment binary:0
+opt/local/include/gio-unix-2.0/gio/gunixoutputstream.h
+@comment MD5:110c188ff731047d2ceae007442b35e6
+@comment binary:0
+opt/local/include/glib-2.0/gio/gaction.h
+@comment MD5:c0b5ea448cb9b52353097152e63e342d
+@comment binary:0
+opt/local/include/glib-2.0/gio/gactiongroup.h
+@comment MD5:f0a04bd3b1a59121498c99f3f21ccf0a
+@comment binary:0
+opt/local/include/glib-2.0/gio/gactiongroupexporter.h
+@comment MD5:8ba5ffbb2918da6390495fe3bebdea60
+@comment binary:0
+opt/local/include/glib-2.0/gio/gactionmap.h
+@comment MD5:b59666875056ccbd081cfffaaf28ea73
+@comment binary:0
+opt/local/include/glib-2.0/gio/gappinfo.h
+@comment MD5:954aceac23842195dc63b3ca9bb7d66b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gapplication.h
+@comment MD5:edeb3fc4c3c9d2704e8de42ecad07ba5
+@comment binary:0
+opt/local/include/glib-2.0/gio/gapplicationcommandline.h
+@comment MD5:27a525d13eb3eb42415d2d631d6fcdec
+@comment binary:0
+opt/local/include/glib-2.0/gio/gasyncinitable.h
+@comment MD5:ac86e0ba347712297d5aefec989daf5e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gasyncresult.h
+@comment MD5:7bff77c73bba6c8af3e21a2876a19f3e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gbufferedinputstream.h
+@comment MD5:500592572f10b0d01447ba8c7d659281
+@comment binary:0
+opt/local/include/glib-2.0/gio/gbufferedoutputstream.h
+@comment MD5:c26aaa992c4f898d03acbaa9669b77d4
+@comment binary:0
+opt/local/include/glib-2.0/gio/gbytesicon.h
+@comment MD5:a2cb9d2e2d882110c9eb912a62e5b87a
+@comment binary:0
+opt/local/include/glib-2.0/gio/gcancellable.h
+@comment MD5:2817b82f446ccaf2f70c38d1b05341fe
+@comment binary:0
+opt/local/include/glib-2.0/gio/gcharsetconverter.h
+@comment MD5:9b6b83fa000fae9d624c3d47d102926c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gcontenttype.h
+@comment MD5:b0b1871cdded645d72520a70170afc1e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gconverter.h
+@comment MD5:da65c9b26d36fec55c7db2456858d63c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gconverterinputstream.h
+@comment MD5:46a9dbbd49c24a4dc46499880c00c1bd
+@comment binary:0
+opt/local/include/glib-2.0/gio/gconverteroutputstream.h
+@comment MD5:505242998e8c45b3f69a9d5e5ac053d0
+@comment binary:0
+opt/local/include/glib-2.0/gio/gcredentials.h
+@comment MD5:f7c39fcdfe120e540933d7f2b8c8d8b3
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdatagrambased.h
+@comment MD5:843cdbb513f0824877b8c0eb0fff734e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdatainputstream.h
+@comment MD5:f7ebcb433e7ebfecc9f22658cadbc05b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdataoutputstream.h
+@comment MD5:7c204d08bb7345f38c31cde1b4eb0ad1
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusactiongroup.h
+@comment MD5:5e7ec326d20faa093db3dc6dfa460a3b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusaddress.h
+@comment MD5:18b9c577d5afa7e83cac69d16ba47db5
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusauthobserver.h
+@comment MD5:789dfe26416e174a2c44216ceb446dcc
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusconnection.h
+@comment MD5:1ca66b4f9a0711c71fe9ff1fd77805f9
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbuserror.h
+@comment MD5:2832cae38b8bf18b483f566f9e08d14c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusinterface.h
+@comment MD5:7f57a1a2d8d1d2d39a8b590a5d8384d4
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusinterfaceskeleton.h
+@comment MD5:839ab7bad566a11a41c4a170ff450b6f
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusintrospection.h
+@comment MD5:d1a11e8ef5c5a39d6514ec8ada13872c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusmenumodel.h
+@comment MD5:3bfa39582ba2b7f7940760f81387f24b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusmessage.h
+@comment MD5:70bf485e49a568960708145ec256fb38
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusmethodinvocation.h
+@comment MD5:d40f4fe5a33a7cbdd9c2695aeee00d37
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusnameowning.h
+@comment MD5:6434b026d17f19900dc72b5e1e95fa2c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusnamewatching.h
+@comment MD5:20b38a0514fa468fe25751557b5557ea
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusobject.h
+@comment MD5:211cc6bd4067bd08e96688c6bed28221
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusobjectmanager.h
+@comment MD5:c73f5467ff0b04789ae33eb0253574a8
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusobjectmanagerclient.h
+@comment MD5:1108942ca757afe1fdc58d6742958627
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusobjectmanagerserver.h
+@comment MD5:a1c43aae1cd4474622964a9f1e97a449
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusobjectproxy.h
+@comment MD5:6ce5e3850fe2c97d7353ea2b9305e466
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusobjectskeleton.h
+@comment MD5:f3c5b47e9d6972b107122e942052d006
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusproxy.h
+@comment MD5:417e04bfaae93490acc586894b48b31b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusserver.h
+@comment MD5:11dca970abd94ca670844f10cf787f83
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdbusutils.h
+@comment MD5:10ecd1a2c615495b1d0858f8a85a6255
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdebugcontroller.h
+@comment MD5:05c4bfa4476fa86a137933bb2178f82d
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdebugcontrollerdbus.h
+@comment MD5:5ff1274a4953bd39efce313beb4fa573
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdrive.h
+@comment MD5:a1a00b312fda14013a6ceb28f9acfe9b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdtlsclientconnection.h
+@comment MD5:c4f16bd0f551e0c583a1a48e0c1f36ec
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdtlsconnection.h
+@comment MD5:5987f4473e58b74be5ad2b91d40f357a
+@comment binary:0
+opt/local/include/glib-2.0/gio/gdtlsserverconnection.h
+@comment MD5:49c3af273fd130dfe6caa6fb91e6791e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gemblem.h
+@comment MD5:0a3ad61df17ecd3fc0858567cf039929
+@comment binary:0
+opt/local/include/glib-2.0/gio/gemblemedicon.h
+@comment MD5:340e839f48b203fc1e1ab779afd9f58b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfile.h
+@comment MD5:7235ca2a42881aae222e5a688c36ba0c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileattribute.h
+@comment MD5:88847db2349d33dc0451f43dab6a3b9a
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileenumerator.h
+@comment MD5:c1912e0f7993b4968b14efd68ba734ae
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileicon.h
+@comment MD5:0a105f7d3680ea72465dd86ddb835066
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileinfo.h
+@comment MD5:de801efe4df00c6a8fffef6b3262e751
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileinputstream.h
+@comment MD5:c8278a0668c113f750bc1d56a05edb02
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileiostream.h
+@comment MD5:c9804128eafd5df5542f0f5335f244fd
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfilemonitor.h
+@comment MD5:4ae0d7276af31f462eb4bfff315e1ae2
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfilenamecompleter.h
+@comment MD5:93a5174810256fc3a31fd72ff3e9fbd0
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfileoutputstream.h
+@comment MD5:55ee370ef022de40e3cc7462c3a06d9f
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfilterinputstream.h
+@comment MD5:118b6f122670b7cdc98568f4ad7db9e3
+@comment binary:0
+opt/local/include/glib-2.0/gio/gfilteroutputstream.h
+@comment MD5:c50f25e3d4eeadcd2a96b30321f20fbf
+@comment binary:0
+opt/local/include/glib-2.0/gio/gicon.h
+@comment MD5:8945a68f0ccc403d6b608b201ac769a4
+@comment binary:0
+opt/local/include/glib-2.0/gio/ginetaddress.h
+@comment MD5:3686c31940e11de1384418a31d947ac9
+@comment binary:0
+opt/local/include/glib-2.0/gio/ginetaddressmask.h
+@comment MD5:0d92ed86cdf259084b66c610ed398fd8
+@comment binary:0
+opt/local/include/glib-2.0/gio/ginetsocketaddress.h
+@comment MD5:9b195dbd6ed03a3c29b235624b6d29df
+@comment binary:0
+opt/local/include/glib-2.0/gio/ginitable.h
+@comment MD5:b396731232123fe423b82a13950c4968
+@comment binary:0
+opt/local/include/glib-2.0/gio/ginputstream.h
+@comment MD5:62ec3dba555138014e12af35fde3cdff
+@comment binary:0
+opt/local/include/glib-2.0/gio/gio-autocleanups.h
+@comment MD5:b385aa8e5c9c0018c3af283def05611a
+@comment binary:0
+opt/local/include/glib-2.0/gio/gio-visibility.h
+@comment MD5:282132641227d799c656fd0d7893a472
+@comment binary:0
+opt/local/include/glib-2.0/gio/gio.h
+@comment MD5:bc167202af6a59220458aa0f4bd306b7
+@comment binary:0
+opt/local/include/glib-2.0/gio/gioenums.h
+@comment MD5:d2db1f277f59b1a2bfc14d65822c2afb
+@comment binary:0
+opt/local/include/glib-2.0/gio/gioenumtypes.h
+@comment MD5:fd8eb85b9003ba803eb34b062e85166e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gioerror.h
+@comment MD5:d0edb368627e128ab7b46845d23d799d
+@comment binary:0
+opt/local/include/glib-2.0/gio/giomodule.h
+@comment MD5:1f4ad03ba0cf4c15f1b71eea223e35b7
+@comment binary:0
+opt/local/include/glib-2.0/gio/gioscheduler.h
+@comment MD5:26f684206839b016eb4514d3e63f291d
+@comment binary:0
+opt/local/include/glib-2.0/gio/giostream.h
+@comment MD5:e18788c0c1b0d75159a5a97c1e3dea78
+@comment binary:0
+opt/local/include/glib-2.0/gio/giotypes.h
+@comment MD5:abc9f0d5c2ff5e3dcd34e768cb7ea47b
+@comment binary:0
+opt/local/include/glib-2.0/gio/giptosmessage.h
+@comment MD5:be02778cff2d9ccacb2aebf7b265be60
+@comment binary:0
+opt/local/include/glib-2.0/gio/gipv6tclassmessage.h
+@comment MD5:2f8277051252401e137fc1f669000c36
+@comment binary:0
+opt/local/include/glib-2.0/gio/glistmodel.h
+@comment MD5:38a9574cc5a180f6e755efef78d65737
+@comment binary:0
+opt/local/include/glib-2.0/gio/gliststore.h
+@comment MD5:778dcc71d49836a69c706179030976e5
+@comment binary:0
+opt/local/include/glib-2.0/gio/gloadableicon.h
+@comment MD5:0c95f022fc45e566842f29df541b5ed5
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmemoryinputstream.h
+@comment MD5:7e9bf919d09080a6043779f8d10ddc58
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmemorymonitor.h
+@comment MD5:3a59c9f21f37f303306d0770215fc510
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmemoryoutputstream.h
+@comment MD5:520dbcce051ac82162060d2b1df8186c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmenu.h
+@comment MD5:c533e06ab0a886013a83f1aa1471c064
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmenuexporter.h
+@comment MD5:0491d05fa175dd97ce92d10feddd1d69
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmenumodel.h
+@comment MD5:ad82f56dabbcdbe6f87d2caf647f5aaf
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmount.h
+@comment MD5:d3425897075bae68d087a64f0999f75b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gmountoperation.h
+@comment MD5:bf52f4a39125b59cb270c72e4786a2d7
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnativesocketaddress.h
+@comment MD5:49202f9a571e12b20f4c374b7e6e470c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnativevolumemonitor.h
+@comment MD5:eae2fcbb935a674f0670657a2ad0e8f9
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnetworkaddress.h
+@comment MD5:ced941fb89436d68f979d7413c0e9d99
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnetworking.h
+@comment MD5:0e4b5d2a849a3db6e03dc2d65a146e95
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnetworkmonitor.h
+@comment MD5:c30598c85b6a87aa0affcee1cd65481b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnetworkservice.h
+@comment MD5:cd412fadaeecbd1a43431942dfa82706
+@comment binary:0
+opt/local/include/glib-2.0/gio/gnotification.h
+@comment MD5:debe416d6bf214f577199cdffc759774
+@comment binary:0
+opt/local/include/glib-2.0/gio/goutputstream.h
+@comment MD5:a36be76f22ce5dcf5f22304faa0b5c05
+@comment binary:0
+opt/local/include/glib-2.0/gio/gpermission.h
+@comment MD5:892897e62c27a7992c2f2c0298d04591
+@comment binary:0
+opt/local/include/glib-2.0/gio/gpollableinputstream.h
+@comment MD5:b407b12db9832c25254779958bf099f8
+@comment binary:0
+opt/local/include/glib-2.0/gio/gpollableoutputstream.h
+@comment MD5:2f5b7522a1b3e0e22a2f95bcf049b39f
+@comment binary:0
+opt/local/include/glib-2.0/gio/gpollableutils.h
+@comment MD5:248813df7a2249bbea3fd0e464f21c3f
+@comment binary:0
+opt/local/include/glib-2.0/gio/gpowerprofilemonitor.h
+@comment MD5:102a140d48382d55f3d83f47fb2de2bc
+@comment binary:0
+opt/local/include/glib-2.0/gio/gpropertyaction.h
+@comment MD5:83708ee5523c3b6beb76d2bf55a9ac2c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gproxy.h
+@comment MD5:361d0afba5f911c1c5a7946d976b02cc
+@comment binary:0
+opt/local/include/glib-2.0/gio/gproxyaddress.h
+@comment MD5:da81880ab3d4ed1cdf527d2519e0178f
+@comment binary:0
+opt/local/include/glib-2.0/gio/gproxyaddressenumerator.h
+@comment MD5:7f707a624f0acb85421ed4925152274e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gproxyresolver.h
+@comment MD5:1d4b9e22d24cff066cc590fc2ebaa6e6
+@comment binary:0
+opt/local/include/glib-2.0/gio/gremoteactiongroup.h
+@comment MD5:da0460a770edba1b292aebd27244a5af
+@comment binary:0
+opt/local/include/glib-2.0/gio/gresolver.h
+@comment MD5:5c656893677163be34a75e9135b24f59
+@comment binary:0
+opt/local/include/glib-2.0/gio/gresource.h
+@comment MD5:f9ce9b41273b283887a8bfe50f3d8ec7
+@comment binary:0
+opt/local/include/glib-2.0/gio/gseekable.h
+@comment MD5:68526fe9746991f47997dccd27df7215
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsettings.h
+@comment MD5:f6f601c18b679815a2d848c6a095dcfe
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsettingsbackend.h
+@comment MD5:1a20f1cc96d463c00aac8cabb2791225
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsettingsschema.h
+@comment MD5:456f7c4ed660ca4a5d4a5cebbe0444a2
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsimpleaction.h
+@comment MD5:a8a8b21e5af4336d5b9ac59489f26f03
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsimpleactiongroup.h
+@comment MD5:0d71af9fd78df224d8f0dbda76bec60b
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsimpleasyncresult.h
+@comment MD5:572ec72c568f12ad95fb0aabdd103bf9
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsimpleiostream.h
+@comment MD5:e6e95486bb481723ab872cf3acccf9a8
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsimplepermission.h
+@comment MD5:d366f60b50ad08c4b995204faacc0459
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsimpleproxyresolver.h
+@comment MD5:ee0ffb516f4d40a3944e533edfd65f01
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocket.h
+@comment MD5:761acf7ea045ac1c79d851620d5e2a10
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketaddress.h
+@comment MD5:83197a13591db68f46bf6fd4f28527c3
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketaddressenumerator.h
+@comment MD5:1e870ec1875e527f3dd45d00475085b9
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketclient.h
+@comment MD5:fbab8013919ee4fba59a55c51cd7397d
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketconnectable.h
+@comment MD5:879e415a9c1ff4ed2db72ce1ec3eea77
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketconnection.h
+@comment MD5:37f89f82fc45b51104ecabfbcabb9549
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketcontrolmessage.h
+@comment MD5:c07fbb81b40ea87995bdca0c34d544d7
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketlistener.h
+@comment MD5:55d7e064031fdfd796c16c0922db604c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsocketservice.h
+@comment MD5:1ab60d02f4cb0b5c21927c25bbffe018
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsrvtarget.h
+@comment MD5:334bfd19b264c99619c0fa109247c756
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsubprocess.h
+@comment MD5:eea0ad75e2369da58adf36486556c239
+@comment binary:0
+opt/local/include/glib-2.0/gio/gsubprocesslauncher.h
+@comment MD5:7d4831d794e1b7e4df8710f4ebcddcd2
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtask.h
+@comment MD5:a97e14683bb0898c1f7cb5fe2a4237eb
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtcpconnection.h
+@comment MD5:df42cf621cbd84808903e39a3d602e28
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtcpwrapperconnection.h
+@comment MD5:a5da5ac200fb4d768304d1b6b4657f57
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtestdbus.h
+@comment MD5:1a3640fe55ee7acb231e7de03efd4ceb
+@comment binary:0
+opt/local/include/glib-2.0/gio/gthemedicon.h
+@comment MD5:0d1fb249de623c44a87e3e8d7748c886
+@comment binary:0
+opt/local/include/glib-2.0/gio/gthreadedsocketservice.h
+@comment MD5:e463ebe205f9ed500b42cc9e17bd0892
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsbackend.h
+@comment MD5:7098582f7e9a98ce2d76042265672c82
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlscertificate.h
+@comment MD5:78bb273d1ec373476f2d7861bfe13dc4
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsclientconnection.h
+@comment MD5:b99b167aed0d96703e84c2ca9b2d7a99
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsconnection.h
+@comment MD5:57d369c7c9778195685a2eec375aae5c
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsdatabase.h
+@comment MD5:3e2869d5edb1b61421dc379560ec4833
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsfiledatabase.h
+@comment MD5:01b330053c81fedf7abac4eefc27228f
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsinteraction.h
+@comment MD5:e21bb8140b1cf1456a0a30409b0e1d83
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlspassword.h
+@comment MD5:f427d7a501b31681e87bd3ec3636b4ac
+@comment binary:0
+opt/local/include/glib-2.0/gio/gtlsserverconnection.h
+@comment MD5:bdc5d776972e58bddf8e3bcf9b5754de
+@comment binary:0
+opt/local/include/glib-2.0/gio/gunixconnection.h
+@comment MD5:ec43ca3d449d1ae6e2fabb3828f7a2dc
+@comment binary:0
+opt/local/include/glib-2.0/gio/gunixcredentialsmessage.h
+@comment MD5:482875cee507f5818205c7f5bbc6ca69
+@comment binary:0
+opt/local/include/glib-2.0/gio/gunixfdlist.h
+@comment MD5:4dd6aef3f7932bb4a1a3406f34079678
+@comment binary:0
+opt/local/include/glib-2.0/gio/gunixsocketaddress.h
+@comment MD5:57dc79bf4cb2f99d990b0580a67f14fb
+@comment binary:0
+opt/local/include/glib-2.0/gio/gvfs.h
+@comment MD5:55c5b24cc706f1ee687d6d13191241a7
+@comment binary:0
+opt/local/include/glib-2.0/gio/gvolume.h
+@comment MD5:865414385f4c3e83e90b7caa14dfd7ef
+@comment binary:0
+opt/local/include/glib-2.0/gio/gvolumemonitor.h
+@comment MD5:d7e159f384a10b8b853a5c40dc7cec6e
+@comment binary:0
+opt/local/include/glib-2.0/gio/gzlibcompressor.h
+@comment MD5:caa8bd833309ca00699979c637e89cac
+@comment binary:0
+opt/local/include/glib-2.0/gio/gzlibdecompressor.h
+@comment MD5:ac3249c60eb293535b1dcb299a559a91
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gi-visibility.h
+@comment MD5:c63bd18fa1bd181f825a22eea46f4baa
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giarginfo.h
+@comment MD5:dc4a00dfd4a6faa94510786c5d181bba
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gibaseinfo.h
+@comment MD5:b4eb1364c8454cdfffbfe554f2df0519
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gicallableinfo.h
+@comment MD5:f08a4769e3779340d732459e8e0330bc
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gicallbackinfo.h
+@comment MD5:daf4ee897e8fa096343e7b57a27fed88
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giconstantinfo.h
+@comment MD5:c6b199d83cfd0f1465f010f4517414c1
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gienuminfo.h
+@comment MD5:aa1c4091607914d79da59a8cccbfae68
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gifieldinfo.h
+@comment MD5:4c5e6981a9fb461c49fc5637bf14a268
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giflagsinfo.h
+@comment MD5:b46587d45a129e83363a11cbb1106442
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gifunctioninfo.h
+@comment MD5:8b20f4cb0f214c58c9a750c14750199e
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giinterfaceinfo.h
+@comment MD5:2953fc1208eb29ae6021d4f960e3c49c
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giobjectinfo.h
+@comment MD5:4f804e975aa156f2541310a73298c4e9
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gipropertyinfo.h
+@comment MD5:c8a426845e96839e4b3094c347ae1e83
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giregisteredtypeinfo.h
+@comment MD5:2e53bf7511913826efc4c1d6aa018369
+@comment binary:0
+opt/local/include/glib-2.0/girepository/girepository-autocleanups.h
+@comment MD5:cdffe62104f696cf44611810ec677910
+@comment binary:0
+opt/local/include/glib-2.0/girepository/girepository.h
+@comment MD5:8cee10c76b88a20b632b43ce4c2a768a
+@comment binary:0
+opt/local/include/glib-2.0/girepository/girffi.h
+@comment MD5:2007f175b14ae2382d7ee65e184ef354
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gisignalinfo.h
+@comment MD5:949d910e63aa9789e2463f1d71d7ff71
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gistructinfo.h
+@comment MD5:36030ca8e7d16240953beec42d4ea588
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gitypeinfo.h
+@comment MD5:4c9f1342903d4ac099ba65d381ecfa4f
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gitypelib.h
+@comment MD5:2f4203def83b4b9bb6d3cd4df4346a68
+@comment binary:0
+opt/local/include/glib-2.0/girepository/gitypes.h
+@comment MD5:408ce92dc899cb01c2240ca825de804c
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giunioninfo.h
+@comment MD5:070f889243cbe8846fb8f17a1d8ef696
+@comment binary:0
+opt/local/include/glib-2.0/girepository/giunresolvedinfo.h
+@comment MD5:1018134fb7e8ac776fc93379af574843
+@comment binary:0
+opt/local/include/glib-2.0/girepository/givalueinfo.h
+@comment MD5:06b102bad46c287cf35df1840bfaffd1
+@comment binary:0
+opt/local/include/glib-2.0/girepository/givfuncinfo.h
+@comment MD5:0d2c600d7a38d528f8c5e241095b8af9
+@comment binary:0
+opt/local/include/glib-2.0/glib/deprecated/gallocator.h
+@comment MD5:435f42295fbb2eaf57cf568674d61d06
+@comment binary:0
+opt/local/include/glib-2.0/glib/deprecated/gcache.h
+@comment MD5:886d451795a4912a1df620b7fcc75f57
+@comment binary:0
+opt/local/include/glib-2.0/glib/deprecated/gcompletion.h
+@comment MD5:b8cc55508548d90d16362c8db858bffa
+@comment binary:0
+opt/local/include/glib-2.0/glib/deprecated/gmain.h
+@comment MD5:f8e53d14fd0046b00a6a85e8b92ee768
+@comment binary:0
+opt/local/include/glib-2.0/glib/deprecated/grel.h
+@comment MD5:ef6331a08395ab9d1797d89fd1649413
+@comment binary:0
+opt/local/include/glib-2.0/glib/deprecated/gthread.h
+@comment MD5:b906c365fa2ffdec1b91301896f4a650
+@comment binary:0
+opt/local/include/glib-2.0/glib/galloca.h
+@comment MD5:bdba7b089db410a8f8daa07b54562d18
+@comment binary:0
+opt/local/include/glib-2.0/glib/garray.h
+@comment MD5:c9d07259d06bf85f8f4e94b41c98acd1
+@comment binary:0
+opt/local/include/glib-2.0/glib/gasyncqueue.h
+@comment MD5:1e3714897df32fbabbf122248ce21218
+@comment binary:0
+opt/local/include/glib-2.0/glib/gatomic.h
+@comment MD5:add93687fa1e17d20e477aadcb2f605a
+@comment binary:0
+opt/local/include/glib-2.0/glib/gbacktrace.h
+@comment MD5:e556ca7ecf3df2e96cb40cb691148f5b
+@comment binary:0
+opt/local/include/glib-2.0/glib/gbase64.h
+@comment MD5:bab578821f3c199f600ccbf3d2db861b
+@comment binary:0
+opt/local/include/glib-2.0/glib/gbitlock.h
+@comment MD5:ebc7b6c709cb7eb0bdca7a65e734a48e
+@comment binary:0
+opt/local/include/glib-2.0/glib/gbookmarkfile.h
+@comment MD5:95661eb565c9331cc4aad34a38058084
+@comment binary:0
+opt/local/include/glib-2.0/glib/gbytes.h
+@comment MD5:7e41df5c03765a87e3e4a42a48c03a3f
+@comment binary:0
+opt/local/include/glib-2.0/glib/gcharset.h
+@comment MD5:52d0e3061a944a0329ee382d56702f5a
+@comment binary:0
+opt/local/include/glib-2.0/glib/gchecksum.h
+@comment MD5:ed103f97195254565a4c719f3966d4f4
+@comment binary:0
+opt/local/include/glib-2.0/glib/gconvert.h
+@comment MD5:7fca4d950a38612cd031dc59f3003a7a
+@comment binary:0
+opt/local/include/glib-2.0/glib/gdataset.h
+@comment MD5:2bf20217c03c9dfc89d030d400bf0b0e
+@comment binary:0
+opt/local/include/glib-2.0/glib/gdate.h
+@comment MD5:8b08f589d7501d128ef8eabf73d3a89c
+@comment binary:0
+opt/local/include/glib-2.0/glib/gdatetime.h
+@comment MD5:0d97fa4dc9debf4e4b9705320c73497c
+@comment binary:0
+opt/local/include/glib-2.0/glib/gdir.h
+@comment MD5:c7b246a92c4f4373e3a6af5ac0162148
+@comment binary:0
+opt/local/include/glib-2.0/glib/genviron.h
+@comment MD5:1c8fac10df577a68182b28523a7cc061
+@comment binary:0
+opt/local/include/glib-2.0/glib/gerror.h
+@comment MD5:322933ca074cbe54b41564f89d0c5b12
+@comment binary:0
+opt/local/include/glib-2.0/glib/gfileutils.h
+@comment MD5:0329d8f2b354c80aceecaecd69d9fca4
+@comment binary:0
+opt/local/include/glib-2.0/glib/ggettext.h
+@comment MD5:63176a0b7a428495ea4163bf1122a5bb
+@comment binary:0
+opt/local/include/glib-2.0/glib/ghash.h
+@comment MD5:ff178276f16d53966cd41952349b047f
+@comment binary:0
+opt/local/include/glib-2.0/glib/ghmac.h
+@comment MD5:9fd5eb126699632d8fd3243530b4dc06
+@comment binary:0
+opt/local/include/glib-2.0/glib/ghook.h
+@comment MD5:ce6c830bfb14a1efeaa6a7207840075b
+@comment binary:0
+opt/local/include/glib-2.0/glib/ghostutils.h
+@comment MD5:48eb6d0f109107d4da2243a051ad5f25
+@comment binary:0
+opt/local/include/glib-2.0/glib/gi18n-lib.h
+@comment MD5:4057b1fd519b7e468c14715d979c1f37
+@comment binary:0
+opt/local/include/glib-2.0/glib/gi18n.h
+@comment MD5:f230ae4d772fbac792f0e2edcb47152c
+@comment binary:0
+opt/local/include/glib-2.0/glib/giochannel.h
+@comment MD5:3f58747d34c9c04b607de936030d2b48
+@comment binary:0
+opt/local/include/glib-2.0/glib/gkeyfile.h
+@comment MD5:0c6b7fddfbfd4558af72386084c4eb05
+@comment binary:0
+opt/local/include/glib-2.0/glib/glib-autocleanups.h
+@comment MD5:229e7f4ae589e59410a74bd2c5cfde2f
+@comment binary:0
+opt/local/include/glib-2.0/glib/glib-typeof.h
+@comment MD5:5f596c91bda4a309f07c55b98a78aa67
+@comment binary:0
+opt/local/include/glib-2.0/glib/glib-visibility.h
+@comment MD5:e62f4534af2c51b8d13b47c2402609b4
+@comment binary:0
+opt/local/include/glib-2.0/glib/glist.h
+@comment MD5:26a569c5c49525b647b5b394044e0025
+@comment binary:0
+opt/local/include/glib-2.0/glib/gmacros.h
+@comment MD5:52fa88427cd26fdae8f1bbf200a4905c
+@comment binary:0
+opt/local/include/glib-2.0/glib/gmain.h
+@comment MD5:f362f11974d1dd7e9e89f6e8b17b92c4
+@comment binary:0
+opt/local/include/glib-2.0/glib/gmappedfile.h
+@comment MD5:c3cd00e332fc5d08f0413a6e5d31c591
+@comment binary:0
+opt/local/include/glib-2.0/glib/gmarkup.h
+@comment MD5:786f586c7c6074a2be1d60ff25e8f019
+@comment binary:0
+opt/local/include/glib-2.0/glib/gmem.h
+@comment MD5:e831567aa4371034e51eb20886d6adc2
+@comment binary:0
+opt/local/include/glib-2.0/glib/gmessages.h
+@comment MD5:3110f4153c674f85d8d689eccfc01b62
+@comment binary:0
+opt/local/include/glib-2.0/glib/gnode.h
+@comment MD5:d5cb3b098b294b5abf2b2313a4a64116
+@comment binary:0
+opt/local/include/glib-2.0/glib/goption.h
+@comment MD5:2ff863cf24e8adf3fa439aeab159e3a0
+@comment binary:0
+opt/local/include/glib-2.0/glib/gpathbuf.h
+@comment MD5:3f1badda2240a0ece089ffcc2a4eb587
+@comment binary:0
+opt/local/include/glib-2.0/glib/gpattern.h
+@comment MD5:c3a125e02e540b248caef9618a9f3439
+@comment binary:0
+opt/local/include/glib-2.0/glib/gpoll.h
+@comment MD5:70c3e60514520f2c57766ce117d715a6
+@comment binary:0
+opt/local/include/glib-2.0/glib/gprimes.h
+@comment MD5:faaa72acc87643f9a5a5c2835d288082
+@comment binary:0
+opt/local/include/glib-2.0/glib/gprintf.h
+@comment MD5:ae1bbd32e1ab8aaa364cd3ef2d77b477
+@comment binary:0
+opt/local/include/glib-2.0/glib/gqsort.h
+@comment MD5:00c2eabf4eb91344caf63d03245c3ad0
+@comment binary:0
+opt/local/include/glib-2.0/glib/gquark.h
+@comment MD5:6076b7c8862817d41eeb53263331a005
+@comment binary:0
+opt/local/include/glib-2.0/glib/gqueue.h
+@comment MD5:735842447eb6d46085c218d3d2f8485e
+@comment binary:0
+opt/local/include/glib-2.0/glib/grand.h
+@comment MD5:80368a45062e255e1967d42481c88d08
+@comment binary:0
+opt/local/include/glib-2.0/glib/grcbox.h
+@comment MD5:3b1853c8cc3b43f06e66cf9ef77a5866
+@comment binary:0
+opt/local/include/glib-2.0/glib/grefcount.h
+@comment MD5:464b29860ec8dfb6dabd6b329ebbf3db
+@comment binary:0
+opt/local/include/glib-2.0/glib/grefstring.h
+@comment MD5:d764a6807949832c8fc7e6740244b7c0
+@comment binary:0
+opt/local/include/glib-2.0/glib/gregex.h
+@comment MD5:d339fc4ca858d4d74900a940feb498da
+@comment binary:0
+opt/local/include/glib-2.0/glib/gscanner.h
+@comment MD5:b7242797f13b9b5e016d5acd68b97909
+@comment binary:0
+opt/local/include/glib-2.0/glib/gsequence.h
+@comment MD5:f340d259ab0360078de40e3c667da692
+@comment binary:0
+opt/local/include/glib-2.0/glib/gshell.h
+@comment MD5:2c29cf8c36701423cffd38cff3afaa04
+@comment binary:0
+opt/local/include/glib-2.0/glib/gslice.h
+@comment MD5:b274e91aeef6006f387cf33ff50534c0
+@comment binary:0
+opt/local/include/glib-2.0/glib/gslist.h
+@comment MD5:c2b16cbedbdd77e3f819637c21501624
+@comment binary:0
+opt/local/include/glib-2.0/glib/gspawn.h
+@comment MD5:75d81597f05036d42c6233d673a45e3b
+@comment binary:0
+opt/local/include/glib-2.0/glib/gstdio.h
+@comment MD5:4becffb70505495a512e524aacaf31c7
+@comment binary:0
+opt/local/include/glib-2.0/glib/gstrfuncs.h
+@comment MD5:9d9b7d6ad7c69b95506d41a0f2984720
+@comment binary:0
+opt/local/include/glib-2.0/glib/gstring.h
+@comment MD5:ae671ad2eaae551afea1b936f1eaf37d
+@comment binary:0
+opt/local/include/glib-2.0/glib/gstringchunk.h
+@comment MD5:89d418cf8ca5d8d390539866f027a753
+@comment binary:0
+opt/local/include/glib-2.0/glib/gstrvbuilder.h
+@comment MD5:d73fbca44de2c512a345fff6b674cd09
+@comment binary:0
+opt/local/include/glib-2.0/glib/gtestutils.h
+@comment MD5:c9820c7f709d8d133523183d016490c9
+@comment binary:0
+opt/local/include/glib-2.0/glib/gthread.h
+@comment MD5:cb3a2c9f96c89396e3a4a2b3ea55abc2
+@comment binary:0
+opt/local/include/glib-2.0/glib/gthreadpool.h
+@comment MD5:d16ca4c525f6d8a8aa200996465f8cec
+@comment binary:0
+opt/local/include/glib-2.0/glib/gtimer.h
+@comment MD5:ce7f25c9c08259b785e5346380b28f4d
+@comment binary:0
+opt/local/include/glib-2.0/glib/gtimezone.h
+@comment MD5:0696431975dfb657d88cee31e53d811c
+@comment binary:0
+opt/local/include/glib-2.0/glib/gtrashstack.h
+@comment MD5:747885a51a405b449d7c8d52cc936f99
+@comment binary:0
+opt/local/include/glib-2.0/glib/gtree.h
+@comment MD5:7f83d480e6645206c8d8fabb8d7cc88c
+@comment binary:0
+opt/local/include/glib-2.0/glib/gtypes.h
+@comment MD5:a41f93a706edf21ba2e2be472b3dc7f5
+@comment binary:0
+opt/local/include/glib-2.0/glib/gunicode.h
+@comment MD5:9245e933b78cb71a9e0e70b9b731148d
+@comment binary:0
+opt/local/include/glib-2.0/glib/guri.h
+@comment MD5:28861c1482a60995759b846102a52024
+@comment binary:0
+opt/local/include/glib-2.0/glib/gutils.h
+@comment MD5:cd787e6e0b3f6fb8f2d9e0f39f0014df
+@comment binary:0
+opt/local/include/glib-2.0/glib/guuid.h
+@comment MD5:a5acc55edf2541259eecfe014ff02fcf
+@comment binary:0
+opt/local/include/glib-2.0/glib/gvariant.h
+@comment MD5:a72f8855ff1cec2489b2ee11d0838395
+@comment binary:0
+opt/local/include/glib-2.0/glib/gvarianttype.h
+@comment MD5:9a440172d8127a55c9769e0e512f1c24
+@comment binary:0
+opt/local/include/glib-2.0/glib/gversion.h
+@comment MD5:804e317953f05e0d42a912c0295230ab
+@comment binary:0
+opt/local/include/glib-2.0/glib/gversionmacros.h
+@comment MD5:7a48b36fff4693884fc3a0d98052d4b9
+@comment binary:0
+opt/local/include/glib-2.0/glib-object.h
+@comment MD5:ebf6102df540924a07602fb4cf418b54
+@comment binary:0
+opt/local/include/glib-2.0/glib-unix.h
+@comment MD5:58aa1d52bd8283823263f0a0c06dfc68
+@comment binary:0
+opt/local/include/glib-2.0/glib.h
+@comment MD5:8a6a84a845386b69d403fcc127ca9734
+@comment binary:0
+opt/local/include/glib-2.0/gmodule/gmodule-visibility.h
+@comment MD5:099ed4920bdbcea2d52c14d4a0eb947a
+@comment binary:0
+opt/local/include/glib-2.0/gmodule.h
+@comment MD5:f5beef21adcdfe029d1bface078f2f8d
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gbinding.h
+@comment MD5:7341a4fea1e60de2f5f1278511a8bd85
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gbindinggroup.h
+@comment MD5:ed17f00a7261d12404cfc2abe4269d76
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gboxed.h
+@comment MD5:a3161d03f15e5d67dc5dcad2607184f6
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gclosure.h
+@comment MD5:7d3050452d76c741d20f420bf3b864f9
+@comment binary:0
+opt/local/include/glib-2.0/gobject/genums.h
+@comment MD5:d301b79d1e9daa07672b00284595f85c
+@comment binary:0
+opt/local/include/glib-2.0/gobject/glib-enumtypes.h
+@comment MD5:e60b2576b7edbf16eb62834df88d7823
+@comment binary:0
+opt/local/include/glib-2.0/gobject/glib-types.h
+@comment MD5:4c646dda6943bb522311fc26f9f95562
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gmarshal.h
+@comment MD5:fa27bd83bb4e5ea881a9678a1a6d1f88
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gobject-autocleanups.h
+@comment MD5:6c2655f89e2edd4573495023bb66f184
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gobject-visibility.h
+@comment MD5:0b81686365f44b0d2dbda6bccbe66476
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gobject.h
+@comment MD5:e69e8019948469fbc64ddba60fe9d6c5
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gobjectnotifyqueue.c
+@comment MD5:b235684c4c3a82eff58ca3b24533ddb2
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gparam.h
+@comment MD5:8774bfead5bee89ff086494d7083a495
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gparamspecs.h
+@comment MD5:484d0de81657a1988dbc90cb3dc1ba48
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gsignal.h
+@comment MD5:09a1b19f2fe51cb9dcae980ee4585cc8
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gsignalgroup.h
+@comment MD5:4236d684b8429ac44d165e4347261c35
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gsourceclosure.h
+@comment MD5:f5f7557a70e3a7539b1ccaf44aed50cf
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gtype.h
+@comment MD5:a8718295cb726e5352b4e32184415152
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gtypemodule.h
+@comment MD5:0b02eaef93890b3f6fe7c30d79ff0751
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gtypeplugin.h
+@comment MD5:b166dca110cb2bb7df9948ad7f0c4921
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gvalue.h
+@comment MD5:5bfc4518df09b4906f0fd5e96afd0d69
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gvaluearray.h
+@comment MD5:5d4995b4f55bca9faac6e90ad5fcb600
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gvaluecollector.h
+@comment MD5:97562abb3cb379f27cda35cce10dae59
+@comment binary:0
+opt/local/include/glib-2.0/gobject/gvaluetypes.h
+@comment MD5:c8c2e547a39d29ab21c015dd37309d2a
+@comment binary:0
+opt/local/lib/girepository-1.0/GIRepository-3.0.typelib
+@comment MD5:1124917b743ab4284942e40aa9766fc8
+@comment binary:0
+opt/local/lib/girepository-1.0/GLib-2.0.typelib
+@comment MD5:cae0e2c07dffd8c5a2497bfefbad642c
+@comment binary:0
+opt/local/lib/girepository-1.0/GLibUnix-2.0.typelib
+@comment MD5:c8e60fdf7928ed109175287de0702452
+@comment binary:0
+opt/local/lib/girepository-1.0/GModule-2.0.typelib
+@comment MD5:b512e8ec8d33b4b7ffcb13f9f07a86ac
+@comment binary:0
+opt/local/lib/girepository-1.0/GObject-2.0.typelib
+@comment MD5:987724df59f478c094d3faa35347d7db
+@comment binary:0
+opt/local/lib/girepository-1.0/Gio-2.0.typelib
+@comment MD5:671a2eac50c88042418b2f8283097475
+@comment binary:0
+opt/local/lib/girepository-1.0/GioUnix-2.0.typelib
+@comment MD5:7e3375f5ff069a42c63bc946e251abb9
+@comment binary:0
+opt/local/lib/glib-2.0/include/glibconfig.h
+@comment MD5:0d5d5b2b71c11a813b4f31996df8b313
+@comment binary:0
+opt/local/lib/libgio-2.0.0.dylib
+@comment MD5:9c91981422a3ed64607a43dd85078c47
+@comment binary:1
+opt/local/lib/libgio-2.0.a
+@comment MD5:48fb84b6153b8d6d1ab9e311948efa33
+@comment binary:0
+opt/local/lib/libgio-2.0.dylib
+@comment MD5:9c91981422a3ed64607a43dd85078c47
+@comment binary:0
+opt/local/lib/libgirepository-2.0.0.dylib
+@comment MD5:17111bd6a5dd249d6d1b4c56da46d321
+@comment binary:1
+opt/local/lib/libgirepository-2.0.a
+@comment MD5:a29a25bee911962e754db26159261ae5
+@comment binary:0
+opt/local/lib/libgirepository-2.0.dylib
+@comment MD5:17111bd6a5dd249d6d1b4c56da46d321
+@comment binary:0
+opt/local/lib/libglib-2.0.0.dylib
+@comment MD5:bb5bee2c6bfcd5d4bf7a5b2b07a7e0e7
+@comment binary:1
+opt/local/lib/libglib-2.0.a
+@comment MD5:5513e35e621b6c64efb313d1e1c91585
+@comment binary:0
+opt/local/lib/libglib-2.0.dylib
+@comment MD5:bb5bee2c6bfcd5d4bf7a5b2b07a7e0e7
+@comment binary:0
+opt/local/lib/libgmodule-2.0.0.dylib
+@comment MD5:44e9186e369889208e36d85f2b55d194
+@comment binary:1
+opt/local/lib/libgmodule-2.0.a
+@comment MD5:af9571634bc70fb9c96006867a056c18
+@comment binary:0
+opt/local/lib/libgmodule-2.0.dylib
+@comment MD5:44e9186e369889208e36d85f2b55d194
+@comment binary:0
+opt/local/lib/libgobject-2.0.0.dylib
+@comment MD5:0aaafc16ed685f3e641a32f8a896440f
+@comment binary:1
+opt/local/lib/libgobject-2.0.a
+@comment MD5:934f37b1f2e3b7f895359438a20fcbaa
+@comment binary:0
+opt/local/lib/libgobject-2.0.dylib
+@comment MD5:0aaafc16ed685f3e641a32f8a896440f
+@comment binary:0
+opt/local/lib/libgthread-2.0.0.dylib
+@comment MD5:b4925b1f3f22f099aea02f746deac9b2
+@comment binary:1
+opt/local/lib/libgthread-2.0.a
+@comment MD5:3ae75ea9010af6c7d8fabd455cb31ad0
+@comment binary:0
+opt/local/lib/libgthread-2.0.dylib
+@comment MD5:b4925b1f3f22f099aea02f746deac9b2
+@comment binary:0
+opt/local/lib/pkgconfig/gio-2.0.pc
+@comment MD5:543538de059af37b8c9a8d2cb3f03a77
+@comment binary:0
+opt/local/lib/pkgconfig/gio-unix-2.0.pc
+@comment MD5:a1a34c78d207911261cfe7b8ebfa37a1
+@comment binary:0
+opt/local/lib/pkgconfig/girepository-2.0.pc
+@comment MD5:858520ec10dc5231679307ff254adaa4
+@comment binary:0
+opt/local/lib/pkgconfig/glib-2.0.pc
+@comment MD5:3bc446efc5df7f4e36728194f6ed33a2
+@comment binary:0
+opt/local/lib/pkgconfig/gmodule-2.0.pc
+@comment MD5:52a16c2316d53f556a66c6d0b46826f2
+@comment binary:0
+opt/local/lib/pkgconfig/gmodule-export-2.0.pc
+@comment MD5:52a16c2316d53f556a66c6d0b46826f2
+@comment binary:0
+opt/local/lib/pkgconfig/gmodule-no-export-2.0.pc
+@comment MD5:e338eb039c3c51316cbc89fb65e907be
+@comment binary:0
+opt/local/lib/pkgconfig/gobject-2.0.pc
+@comment MD5:55b596ab2471cb5bb148013df4697713
+@comment binary:0
+opt/local/lib/pkgconfig/gthread-2.0.pc
+@comment MD5:4078263f13c0ff7d391bd931d894d1b7
+@comment binary:0
+opt/local/libexec/gio-launch-desktop
+@comment MD5:39ce86ca1dda29274f1bd32cb12a1649
+@comment binary:1
+opt/local/share/aclocal/glib-2.0.m4
+@comment MD5:b8e1cdb4c08c576836b5e1baaa52a615
+@comment binary:0
+opt/local/share/aclocal/glib-gettext.m4
+@comment MD5:dd802a85a3e421b957997ecf22ad8197
+@comment binary:0
+opt/local/share/aclocal/gsettings.m4
+@comment MD5:0056fd72b8e22c579eea98e283419720
+@comment binary:0
+opt/local/share/bash-completion/completions/gapplication
+@comment MD5:0306d146d39973d9635915a0fb88eeeb
+@comment binary:0
+opt/local/share/bash-completion/completions/gdbus
+@comment MD5:ac2a7505d61852e5aea0c58d0d47c258
+@comment binary:0
+opt/local/share/bash-completion/completions/gio
+@comment MD5:ff180887458f8c6078034fe64523d2a5
+@comment binary:0
+opt/local/share/bash-completion/completions/gresource
+@comment MD5:564517a91dee02ff8414655d050630f1
+@comment binary:0
+opt/local/share/bash-completion/completions/gsettings
+@comment MD5:d35eecbe2692e2a8578b63b7c9e27e2c
+@comment binary:0
+opt/local/share/doc/glib/COPYING
+@comment MD5:41890f71f740302b785c27661123bff5
+@comment binary:0
+opt/local/share/doc/glib/NEWS
+@comment MD5:685415ec7cf84f489db097ae84a4a637
+@comment binary:0
+opt/local/share/doc/glib/README.md
+@comment MD5:64a602c573092f23e026a0c12056029f
+@comment binary:0
+opt/local/share/gdb/auto-load/opt/local/lib/libglib-2.0.so.0.8800.3-gdb.py
+@comment MD5:e7121f1b57a5370e2a6d35c89eb5c266
+@comment binary:0
+opt/local/share/gdb/auto-load/opt/local/lib/libgobject-2.0.so.0.8800.3-gdb.py
+@comment MD5:43f7d89dee76f5bcb7db13c88cf73e4b
+@comment binary:0
+opt/local/share/gettext/its/gschema.its
+@comment MD5:7ea1209820c3bfee0364c661a4aacd78
+@comment binary:0
+opt/local/share/gettext/its/gschema.loc
+@comment MD5:483d08f199c40dde84d357fb226d3060
+@comment binary:0
+opt/local/share/gir-1.0/GIRepository-3.0.gir
+@comment MD5:5ca11404142b851819c0099009f0cdf2
+@comment binary:0
+opt/local/share/gir-1.0/GLib-2.0.gir
+@comment MD5:36c358ca8cf37e5f216f39d3dfe5e62b
+@comment binary:0
+opt/local/share/gir-1.0/GLibUnix-2.0.gir
+@comment MD5:681f4881f3eac12525781d066532a0f2
+@comment binary:0
+opt/local/share/gir-1.0/GModule-2.0.gir
+@comment MD5:8aa4d2bb59ed143e950a3fd086dc23c6
+@comment binary:0
+opt/local/share/gir-1.0/GObject-2.0.gir
+@comment MD5:4fc311f3c71de9339e65b47c919e7134
+@comment binary:0
+opt/local/share/gir-1.0/Gio-2.0.gir
+@comment MD5:5f862e7808b46ea0960fbd5bb2df161b
+@comment binary:0
+opt/local/share/gir-1.0/GioUnix-2.0.gir
+@comment MD5:a71a58961c6c61e8644414dae87eed6a
+@comment binary:0
+opt/local/share/glib-2.0/codegen/__init__.py
+@comment MD5:fcede79c13365054d829d22530b0bdae
+@comment binary:0
+opt/local/share/glib-2.0/codegen/codegen.py
+@comment MD5:e6e60e8ce61a9ab29475b11b6af14e42
+@comment binary:0
+opt/local/share/glib-2.0/codegen/codegen_docbook.py
+@comment MD5:666f97d1fd306b0a18c57258451281b8
+@comment binary:0
+opt/local/share/glib-2.0/codegen/codegen_main.py
+@comment MD5:2c6c63ee6c8ea3eab20b1a5baa1b6101
+@comment binary:0
+opt/local/share/glib-2.0/codegen/codegen_md.py
+@comment MD5:570d89ec2e3bf930c0f2a0219e1aebfe
+@comment binary:0
+opt/local/share/glib-2.0/codegen/codegen_rst.py
+@comment MD5:272608905907dc889017a6639c95bd5b
+@comment binary:0
+opt/local/share/glib-2.0/codegen/config.py
+@comment MD5:1686aaa8db06a77c73a299f201c5cad8
+@comment binary:0
+opt/local/share/glib-2.0/codegen/dbustypes.py
+@comment MD5:bdc7767a4b4e1a35d1ecd2c289bd521b
+@comment binary:0
+opt/local/share/glib-2.0/codegen/parser.py
+@comment MD5:6aaac34b8ffd992fa87f153c1735ff81
+@comment binary:0
+opt/local/share/glib-2.0/codegen/utils.py
+@comment MD5:11bb1551524ff80945d47625a2d87fed
+@comment binary:0
+opt/local/share/glib-2.0/dtds/gresource.dtd
+@comment MD5:fe3e277504cab7462eaad2f6739b818d
+@comment binary:0
+opt/local/share/glib-2.0/gdb/glib_gdb.py
+@comment MD5:32c0cf071f4cb7e1bc5d3bdaade8f671
+@comment binary:0
+opt/local/share/glib-2.0/gdb/gobject_gdb.py
+@comment MD5:81b12c2863d5b2878d97c7a705dd3779
+@comment binary:0
+opt/local/share/glib-2.0/gettext/po/Makefile.in.in
+@comment MD5:72b0d15a18d7176ab88dd7fac3205f12
+@comment binary:0
+opt/local/share/glib-2.0/schemas/gschema.dtd
+@comment MD5:8c7c0cc67d63e1de367c04e53be1ce1f
+@comment binary:0
+opt/local/share/glib-2.0/valgrind/glib.supp
+@comment MD5:8e9f0297ac6b8b136f9ad2d0ce7485bd
+@comment binary:0
+opt/local/share/locale/ab/LC_MESSAGES/glib20.mo
+@comment MD5:45e115771144e122daf4041b9f15c830
+@comment binary:0
+opt/local/share/locale/af/LC_MESSAGES/glib20.mo
+@comment MD5:348b8026502d339a3c932e48037164ce
+@comment binary:0
+opt/local/share/locale/am/LC_MESSAGES/glib20.mo
+@comment MD5:a1a356e24de20c80d8affeb606cab86e
+@comment binary:0
+opt/local/share/locale/an/LC_MESSAGES/glib20.mo
+@comment MD5:cecc668796347855f73d0c435e264b79
+@comment binary:0
+opt/local/share/locale/ar/LC_MESSAGES/glib20.mo
+@comment MD5:b01ac710928f218829688e8eea32b54d
+@comment binary:0
+opt/local/share/locale/as/LC_MESSAGES/glib20.mo
+@comment MD5:7d9b3d18467b21cd7b3503fb374fa915
+@comment binary:0
+opt/local/share/locale/ast/LC_MESSAGES/glib20.mo
+@comment MD5:404f80088fdb66ff567371466bdba280
+@comment binary:0
+opt/local/share/locale/az/LC_MESSAGES/glib20.mo
+@comment MD5:78a9e6226fe5fadf1d77a8c706f3e95c
+@comment binary:0
+opt/local/share/locale/be/LC_MESSAGES/glib20.mo
+@comment MD5:9b3802c7fe62c4ced0b8f4c8bd6bc999
+@comment binary:0
+opt/local/share/locale/be@latin/LC_MESSAGES/glib20.mo
+@comment MD5:d8451d40bf433e5db8c2ef9a7014a5c7
+@comment binary:0
+opt/local/share/locale/bg/LC_MESSAGES/glib20.mo
+@comment MD5:d14c155df5ef69b5c48dcb51f6e15434
+@comment binary:0
+opt/local/share/locale/bn/LC_MESSAGES/glib20.mo
+@comment MD5:c6b611dd69b0fc101ff364f4914f2c6f
+@comment binary:0
+opt/local/share/locale/bn_IN/LC_MESSAGES/glib20.mo
+@comment MD5:39d6808c16d8195204c874d78c96a796
+@comment binary:0
+opt/local/share/locale/bs/LC_MESSAGES/glib20.mo
+@comment MD5:2d4cb9e9b6390f29dc59657c9fddedc9
+@comment binary:0
+opt/local/share/locale/ca/LC_MESSAGES/glib20.mo
+@comment MD5:b001a76482bef553aea37223c59d0dae
+@comment binary:0
+opt/local/share/locale/ca@valencia/LC_MESSAGES/glib20.mo
+@comment MD5:77b27ae95cac7bd09be33757bc374235
+@comment binary:0
+opt/local/share/locale/cs/LC_MESSAGES/glib20.mo
+@comment MD5:c411e256f20f8b97c48682c9d0e469ab
+@comment binary:0
+opt/local/share/locale/cy/LC_MESSAGES/glib20.mo
+@comment MD5:677664c12749dfccca0e48988d2f22fb
+@comment binary:0
+opt/local/share/locale/da/LC_MESSAGES/glib20.mo
+@comment MD5:eb098f268fee03cc7566a3dfffd7f224
+@comment binary:0
+opt/local/share/locale/de/LC_MESSAGES/glib20.mo
+@comment MD5:494531ee972442eba0cd7e7eb71d0904
+@comment binary:0
+opt/local/share/locale/dz/LC_MESSAGES/glib20.mo
+@comment MD5:750bad1c9753afc1ed7db191001a743f
+@comment binary:0
+opt/local/share/locale/el/LC_MESSAGES/glib20.mo
+@comment MD5:117a59667ea9f17d7039c18389b5d1a0
+@comment binary:0
+opt/local/share/locale/en@shaw/LC_MESSAGES/glib20.mo
+@comment MD5:ae0e1001299797a5650f187312e4797f
+@comment binary:0
+opt/local/share/locale/en_CA/LC_MESSAGES/glib20.mo
+@comment MD5:a6bb7a6a36db4ef4edf91b9f0fa45166
+@comment binary:0
+opt/local/share/locale/en_GB/LC_MESSAGES/glib20.mo
+@comment MD5:d28dc510a0bf97fa11d26ed351c9f9b2
+@comment binary:0
+opt/local/share/locale/eo/LC_MESSAGES/glib20.mo
+@comment MD5:a09343e0d41e0fb530199064bc5e065a
+@comment binary:0
+opt/local/share/locale/es/LC_MESSAGES/glib20.mo
+@comment MD5:1ad21530e09b9c182291b075f007918f
+@comment binary:0
+opt/local/share/locale/et/LC_MESSAGES/glib20.mo
+@comment MD5:211eebc764ebd69376ca575ef6266ff4
+@comment binary:0
+opt/local/share/locale/eu/LC_MESSAGES/glib20.mo
+@comment MD5:4e0b49d9e18004defc77d0d8f904c1d6
+@comment binary:0
+opt/local/share/locale/fa/LC_MESSAGES/glib20.mo
+@comment MD5:2197e3d7db358a815f23d26c1fc84578
+@comment binary:0
+opt/local/share/locale/fi/LC_MESSAGES/glib20.mo
+@comment MD5:d1c9c03e4141d9df1166797b5fb3c4b7
+@comment binary:0
+opt/local/share/locale/fr/LC_MESSAGES/glib20.mo
+@comment MD5:af50f8f7eaed4e67da33a2f9f1f91ba5
+@comment binary:0
+opt/local/share/locale/fur/LC_MESSAGES/glib20.mo
+@comment MD5:c1f4d3908251488252b478ecf159a7bb
+@comment binary:0
+opt/local/share/locale/ga/LC_MESSAGES/glib20.mo
+@comment MD5:5734efd44fd6208c9add204921fa17db
+@comment binary:0
+opt/local/share/locale/gd/LC_MESSAGES/glib20.mo
+@comment MD5:56ee1ecf673679c3ba3f9236beb00e8b
+@comment binary:0
+opt/local/share/locale/gl/LC_MESSAGES/glib20.mo
+@comment MD5:33eeda9ee70d05931cda1ea7b6c46185
+@comment binary:0
+opt/local/share/locale/gu/LC_MESSAGES/glib20.mo
+@comment MD5:34b6009ee2cf85d59667acee8d7e598a
+@comment binary:0
+opt/local/share/locale/he/LC_MESSAGES/glib20.mo
+@comment MD5:50676a8516e04acba181cc4b06cf4269
+@comment binary:0
+opt/local/share/locale/hi/LC_MESSAGES/glib20.mo
+@comment MD5:a481b041d5a6ddbb1241ef48706d5093
+@comment binary:0
+opt/local/share/locale/hr/LC_MESSAGES/glib20.mo
+@comment MD5:c83337c696894cd573759e338c40045d
+@comment binary:0
+opt/local/share/locale/hu/LC_MESSAGES/glib20.mo
+@comment MD5:20ff2567a6f1b8bf6a525fd2b4da4cfa
+@comment binary:0
+opt/local/share/locale/hy/LC_MESSAGES/glib20.mo
+@comment MD5:285d895d61d91dab0094a8b1b966bb10
+@comment binary:0
+opt/local/share/locale/id/LC_MESSAGES/glib20.mo
+@comment MD5:4b2b5ddbcf87dd803ce56e7422431524
+@comment binary:0
+opt/local/share/locale/ie/LC_MESSAGES/glib20.mo
+@comment MD5:e9e4d08460ddfcd15d074ecbd70bfeff
+@comment binary:0
+opt/local/share/locale/is/LC_MESSAGES/glib20.mo
+@comment MD5:301ef97d68f42d5cb6cfbb4cdab182b4
+@comment binary:0
+opt/local/share/locale/it/LC_MESSAGES/glib20.mo
+@comment MD5:66bff4c187c06844a2d6f4cd44a0b4ec
+@comment binary:0
+opt/local/share/locale/ja/LC_MESSAGES/glib20.mo
+@comment MD5:5b1699b3515d1649152edc0786d4a570
+@comment binary:0
+opt/local/share/locale/ka/LC_MESSAGES/glib20.mo
+@comment MD5:ce8bcfab007b5c1ad6c1b52d96481729
+@comment binary:0
+opt/local/share/locale/kab/LC_MESSAGES/glib20.mo
+@comment MD5:5bea8f0fa7fd9a93b502877468fc7095
+@comment binary:0
+opt/local/share/locale/kk/LC_MESSAGES/glib20.mo
+@comment MD5:10c2be6ac23b83361e781eafd657eb38
+@comment binary:0
+opt/local/share/locale/kn/LC_MESSAGES/glib20.mo
+@comment MD5:b7240e55a88fa7bcf6acc8406ec90d03
+@comment binary:0
+opt/local/share/locale/ko/LC_MESSAGES/glib20.mo
+@comment MD5:29673f984fcc37b9703d63b46289feeb
+@comment binary:0
+opt/local/share/locale/ku/LC_MESSAGES/glib20.mo
+@comment MD5:5e08ea08513051bee3e8df0acb3fbff0
+@comment binary:0
+opt/local/share/locale/lt/LC_MESSAGES/glib20.mo
+@comment MD5:83ac9d45dfcd0855f8c36219e7321bd5
+@comment binary:0
+opt/local/share/locale/lv/LC_MESSAGES/glib20.mo
+@comment MD5:5abd7244d5994e3e91ca83f1b0c5db09
+@comment binary:0
+opt/local/share/locale/mai/LC_MESSAGES/glib20.mo
+@comment MD5:1e447d4367094f57b481cc7646f73a5f
+@comment binary:0
+opt/local/share/locale/mg/LC_MESSAGES/glib20.mo
+@comment MD5:25be7e4f54f5028cda6e379e8a23754c
+@comment binary:0
+opt/local/share/locale/mk/LC_MESSAGES/glib20.mo
+@comment MD5:5d3f98ed05f75a397ab505892449cd13
+@comment binary:0
+opt/local/share/locale/ml/LC_MESSAGES/glib20.mo
+@comment MD5:d8baf30aca5c754e12d8b203c3bcc9e2
+@comment binary:0
+opt/local/share/locale/mn/LC_MESSAGES/glib20.mo
+@comment MD5:ea0d61bf9c087a661793a885484b27d2
+@comment binary:0
+opt/local/share/locale/mr/LC_MESSAGES/glib20.mo
+@comment MD5:9c53e7f3452e5b395383a3fa064e45d1
+@comment binary:0
+opt/local/share/locale/ms/LC_MESSAGES/glib20.mo
+@comment MD5:53cc990a4942314ddf03be9779641525
+@comment binary:0
+opt/local/share/locale/nb/LC_MESSAGES/glib20.mo
+@comment MD5:11be31a1dc46c0960299789066c10a60
+@comment binary:0
+opt/local/share/locale/nds/LC_MESSAGES/glib20.mo
+@comment MD5:1eb30cb0a04adc11413e16ecc18d26cd
+@comment binary:0
+opt/local/share/locale/ne/LC_MESSAGES/glib20.mo
+@comment MD5:f4f544424ec9ebeb9fa026ccee7c34e9
+@comment binary:0
+opt/local/share/locale/nl/LC_MESSAGES/glib20.mo
+@comment MD5:c83a5a7c8f12176b01a38b59abd3bfa9
+@comment binary:0
+opt/local/share/locale/nn/LC_MESSAGES/glib20.mo
+@comment MD5:050d5e390ff1c42c05276e3f2faa73fd
+@comment binary:0
+opt/local/share/locale/oc/LC_MESSAGES/glib20.mo
+@comment MD5:dab55e135bfe363171963865c4df6cc0
+@comment binary:0
+opt/local/share/locale/or/LC_MESSAGES/glib20.mo
+@comment MD5:70ecc3e040a07114cb474adb6f07883d
+@comment binary:0
+opt/local/share/locale/pa/LC_MESSAGES/glib20.mo
+@comment MD5:222d4040a99b7614d836a1116319d48f
+@comment binary:0
+opt/local/share/locale/pl/LC_MESSAGES/glib20.mo
+@comment MD5:2078aab0f61529b400b6fceb3b129884
+@comment binary:0
+opt/local/share/locale/ps/LC_MESSAGES/glib20.mo
+@comment MD5:a7f414921745859f9c036bb0fe91df27
+@comment binary:0
+opt/local/share/locale/pt/LC_MESSAGES/glib20.mo
+@comment MD5:c0f742848951c760aaf2d2ef394857ba
+@comment binary:0
+opt/local/share/locale/pt_BR/LC_MESSAGES/glib20.mo
+@comment MD5:c8d25abdbf7bb3cbfed947963d926a18
+@comment binary:0
+opt/local/share/locale/ro/LC_MESSAGES/glib20.mo
+@comment MD5:f691034da5cf399170db381349d367f7
+@comment binary:0
+opt/local/share/locale/ru/LC_MESSAGES/glib20.mo
+@comment MD5:54c7b1951f92672002d2208f0a92bca3
+@comment binary:0
+opt/local/share/locale/rw/LC_MESSAGES/glib20.mo
+@comment MD5:d305fa4fa9b63e4e08a9cd68619ace57
+@comment binary:0
+opt/local/share/locale/si/LC_MESSAGES/glib20.mo
+@comment MD5:e033ca995d554fcaff846f93b923911a
+@comment binary:0
+opt/local/share/locale/sk/LC_MESSAGES/glib20.mo
+@comment MD5:ef0c22f26d3d3bab7e523c8db32877c7
+@comment binary:0
+opt/local/share/locale/sl/LC_MESSAGES/glib20.mo
+@comment MD5:2ca74bb8eb4268816c9fa17ac5e6c835
+@comment binary:0
+opt/local/share/locale/sq/LC_MESSAGES/glib20.mo
+@comment MD5:e86a01ee0354b5153374259df9ef01ce
+@comment binary:0
+opt/local/share/locale/sr/LC_MESSAGES/glib20.mo
+@comment MD5:bb669baabdb5de865929caf9019a3ae3
+@comment binary:0
+opt/local/share/locale/sr@ije/LC_MESSAGES/glib20.mo
+@comment MD5:4e221d938a81f607f45ca480e297608c
+@comment binary:0
+opt/local/share/locale/sr@latin/LC_MESSAGES/glib20.mo
+@comment MD5:0c2bed6b9fdae13139e8b67d22d05f42
+@comment binary:0
+opt/local/share/locale/sv/LC_MESSAGES/glib20.mo
+@comment MD5:da1016c21deadf0695dcd35ce64b3044
+@comment binary:0
+opt/local/share/locale/ta/LC_MESSAGES/glib20.mo
+@comment MD5:86311f8d96bf2deda787c0f251ff3d95
+@comment binary:0
+opt/local/share/locale/te/LC_MESSAGES/glib20.mo
+@comment MD5:00f1d9fd42107d987ad5868f88a93896
+@comment binary:0
+opt/local/share/locale/tg/LC_MESSAGES/glib20.mo
+@comment MD5:9ecaa308f12917d5e1d52310d1bdd12a
+@comment binary:0
+opt/local/share/locale/th/LC_MESSAGES/glib20.mo
+@comment MD5:38728f65b951ec54824f31c860c1c259
+@comment binary:0
+opt/local/share/locale/tl/LC_MESSAGES/glib20.mo
+@comment MD5:fa7469705c9d60819ef51690171929bf
+@comment binary:0
+opt/local/share/locale/tr/LC_MESSAGES/glib20.mo
+@comment MD5:cfc5ccc0e8b8579652253436deb347dc
+@comment binary:0
+opt/local/share/locale/tt/LC_MESSAGES/glib20.mo
+@comment MD5:b1a2a30bc3fd8321888a435365e83a03
+@comment binary:0
+opt/local/share/locale/ug/LC_MESSAGES/glib20.mo
+@comment MD5:1c04c7f7be53bfc73669d0e5153761d2
+@comment binary:0
+opt/local/share/locale/uk/LC_MESSAGES/glib20.mo
+@comment MD5:a0288908179cce8b7aac52470b64719b
+@comment binary:0
+opt/local/share/locale/vi/LC_MESSAGES/glib20.mo
+@comment MD5:be5047dd4ff8731e2d2ca040830c03c7
+@comment binary:0
+opt/local/share/locale/wa/LC_MESSAGES/glib20.mo
+@comment MD5:c74595ea709c49b041d49f70ae6c95fb
+@comment binary:0
+opt/local/share/locale/xh/LC_MESSAGES/glib20.mo
+@comment MD5:97a9000d3b3e60f2e27dc1e1c14c77ad
+@comment binary:0
+opt/local/share/locale/yi/LC_MESSAGES/glib20.mo
+@comment MD5:9f8bbcfcc3ee7b3c9fa6e81171f43a9a
+@comment binary:0
+opt/local/share/locale/zh_CN/LC_MESSAGES/glib20.mo
+@comment MD5:f84d02e2e5321c824d6de2d15670b053
+@comment binary:0
+opt/local/share/locale/zh_HK/LC_MESSAGES/glib20.mo
+@comment MD5:37bdec6abb16c702227e1f57307c6cc6
+@comment binary:0
+opt/local/share/locale/zh_TW/LC_MESSAGES/glib20.mo
+@comment MD5:292e3f552fefa2df471520eb40d17c71
+@comment binary:0
+@ignore
++COMMENT
+@ignore
++CONTENTS
+@ignore
++DESC
+@ignore
++PORTFILE
+@ignore
++STATE
+@cxx_stdlib none
+@cxx_stdlib_overridden 0

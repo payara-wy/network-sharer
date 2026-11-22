@@ -14,7 +14,7 @@ with tempfile.TemporaryDirectory(prefix='networksharer-lease-store-',dir='/priva
                     '-DNETWORKSHARER_EXPECTED_UID='+str(os.geteuid()),
                     str(ROOT/'Sources/lease_store.c'),'-o',str(binary)],check=True)
     def invoke(): return subprocess.run([str(binary)],capture_output=True,text=True,timeout=10)
-    directory=parent/'com.local.networksharer'; lease=directory/'dhcp-leases.ini'
+    directory=parent/'com.local.lansharer'; lease=directory/'dhcp-leases.ini'
     first=invoke()
     assert first.returncode==0 and first.stdout.strip()==str(lease),(first.returncode,first.stderr)
     assert directory.stat().st_mode&0o777==0o700 and lease.stat().st_mode&0o777==0o600
